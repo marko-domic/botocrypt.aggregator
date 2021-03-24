@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:aggregator}
+    username: ${DB_USERNAME:user}
+    password: ${DB_PASSWORD:password}
+    hikari:
+      auto-commit: false
+      pool-name: aggregator-db-pool
+      maximum-pool-size: 2
+    driverClassName: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        generate_statistics: true
+        jdbc.time_zone: UTC
+        connection:
+          provider_disables_autocommit: true
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+  quartz:
+    job-store-type: jdbc
+  h2:
+    console:
+      enabled: true
+
+aggregator:
+  scheduler:
+    cron: ${CRON_EXPRESSION:0 * * ? * * *}

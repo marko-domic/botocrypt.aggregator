@@ -41,3 +41,7 @@ gradle-app.setting
 **/build/
 
 .DS_Store
+
+cex_api/*
+!cex_api/build.gradle
+!cex_api/.openapi-generator-ignore
