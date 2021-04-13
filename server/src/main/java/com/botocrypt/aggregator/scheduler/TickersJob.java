@@ -1,12 +1,16 @@
 package com.botocrypt.aggregator.scheduler;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+
 import com.botocrypt.aggregator.processor.ExchangeProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component(SCOPE_PROTOTYPE)
 public class TickersJob extends QuartzJobBean {
 
   private final ExchangeProcessor exchangeProcessor;

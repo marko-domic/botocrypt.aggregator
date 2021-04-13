@@ -21,7 +21,8 @@ public class CexExchangeProcessor implements ExchangeProcessor {
 
   @Override
   public void getCoinPrices() {
-    final Mono<ApiResponseDto> monoResponse = tickersApi.getCryptocurrenciesPricesForOneMarketSymbol("BTC");
+    final Mono<ApiResponseDto> monoResponse = tickersApi
+        .getCryptocurrenciesPricesForOneMarketSymbol("BTC");
     if (monoResponse == null) {
       log.error("No data fetched from CEX.IO (monoResponse is null)");
       return;
