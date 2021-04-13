@@ -2,8 +2,10 @@ pluginManagement {
     plugins {
         id 'io.spring.dependency-management' version '1.0.11.RELEASE'
         id 'org.springframework.boot' version '2.4.2'
+        id 'org.openapi.generator' version '5.1.0'
+        id 'de.undercouch.download' version '4.1.1'
     }
 }
 
 rootProject.name = 'aggregator'
-include 'server'
+include 'server', 'cex_api'
