@@ -11,7 +11,6 @@ spring:
   jpa:
     properties:
       hibernate:
-        generate_statistics: true
         jdbc.time_zone: UTC
         connection:
           provider_disables_autocommit: true
@@ -24,7 +23,12 @@ spring:
   h2:
     console:
       enabled: true
+  profiles:
+    active: service
 
 aggregator:
   scheduler:
     cron: ${CRON_EXPRESSION:0 * * ? * * *}
+  exchange:
+    cex:
+      name: CEX.IO

@@ -3,7 +3,7 @@ package com.botocrypt.aggregator.processor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
@@ -26,7 +26,7 @@ public class CryptoProcessorTest {
     final List<ExchangeProcessor> exchangeProcessors = Collections.singletonList(exchangeProcessor);
     final CryptoProcessor cryptoProcessor = new CryptoProcessor(exchangeProcessors);
 
-    doNothing().when(exchangeProcessor).getCoinPrices();
+    doReturn(null).when(exchangeProcessor).getCoinPrices();
 
     cryptoProcessor.processCryptoFromExchanges();
 

@@ -1,5 +1,6 @@
 package com.botocrypt.aggregator.configuration;
 
+import com.botocrypt.exchange.cex.io.api.OrderbookApi;
 import com.botocrypt.exchange.cex.io.api.TickersApi;
 import com.botocrypt.exchange.cex.io.invoker.ApiClient;
 import com.botocrypt.exchange.cex.io.invoker.RFC3339DateFormat;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
@@ -21,8 +23,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @Configuration
 @Import({
-    TickersApi.class
+    TickersApi.class,
+    OrderbookApi.class
 })
+@Profile("service")
 public class ExchangeConfiguration {
 
   private final Jackson2ObjectMapperBuilder objectMapperBuilder;
@@ -34,6 +38,7 @@ public class ExchangeConfiguration {
   }
 
   @Bean
+  @Profile("service")
   public ApiClient cexApiClient() {
 
     final ObjectMapper objectMapper = objectMapperBuilder.build();
