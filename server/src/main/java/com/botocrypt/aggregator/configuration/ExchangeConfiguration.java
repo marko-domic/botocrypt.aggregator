@@ -1,6 +1,6 @@
 package com.botocrypt.aggregator.configuration;
 
-import com.botocrypt.exchange.cex.io.api.OrderbookApi;
+import com.botocrypt.exchange.cex.io.api.OrderBookApi;
 import com.botocrypt.exchange.cex.io.api.TickersApi;
 import com.botocrypt.exchange.cex.io.invoker.ApiClient;
 import com.botocrypt.exchange.cex.io.invoker.RFC3339DateFormat;
@@ -24,7 +24,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 @Import({
     TickersApi.class,
-    OrderbookApi.class
+    OrderBookApi.class
 })
 @Profile("service")
 public class ExchangeConfiguration {

@@ -15,8 +15,8 @@ import com.botocrypt.aggregator.model.CryptoPairOrder;
 import com.botocrypt.aggregator.model.Exchange;
 import com.botocrypt.aggregator.repository.CoinPairRepository;
 import com.botocrypt.aggregator.repository.ExchangeRepository;
-import com.botocrypt.exchange.cex.io.api.OrderbookApi;
-import com.botocrypt.exchange.cex.io.dto.OrderbookDto;
+import com.botocrypt.exchange.cex.io.api.OrderBookApi;
+import com.botocrypt.exchange.cex.io.dto.OrderBookDto;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ public class CexExchangeProcessorTest {
   private static final String CEX_EXCHANGE_NAME = "CEX.IO";
 
   @Mock
-  private OrderbookApi orderbookApi;
+  private OrderBookApi OrderBookApi;
 
   @Mock
   private ExchangeRepository exchangeRepository;
@@ -45,7 +45,7 @@ public class CexExchangeProcessorTest {
 
   @BeforeEach
   void setup() {
-    cexExchangeProcessor = new CexExchangeProcessor(orderbookApi, exchangeRepository,
+    cexExchangeProcessor = new CexExchangeProcessor(OrderBookApi, exchangeRepository,
         coinPairRepository, CEX_EXCHANGE_NAME);
   }
 
@@ -80,22 +80,22 @@ public class CexExchangeProcessorTest {
     coinPair.setExchange(exchange);
     coinPair.setMarketSymbol(marketSymbolPair);
 
-    final OrderbookDto orderbookDto = new OrderbookDto();
-    orderbookDto.setPair(marketSymbolPair);
+    final OrderBookDto OrderBookDto = new OrderBookDto();
+    OrderBookDto.setPair(marketSymbolPair);
 
-    final Mono<OrderbookDto> monoResponse = Mono.just(orderbookDto);
+    final Mono<OrderBookDto> monoResponse = Mono.just(OrderBookDto);
 
     doReturn(exchange).when(exchangeRepository).findOneByName(eq(CEX_EXCHANGE_NAME));
     doReturn(Collections.singletonList(coinPair)).when(coinPairRepository)
         .findByCoinPairIdentityExchangeId(eq(exchange.getId()));
-    doReturn(monoResponse).when(orderbookApi).getOrderbookForCryptoPair(eq("BTC"), eq("USD"));
+    doReturn(monoResponse).when(OrderBookApi).getOrderBookForCryptoPair(eq("BTC"), eq("USD"));
 
     final List<CryptoPairOrder> cryptoPairOrders = cexExchangeProcessor.getCoinPrices();
 
     assertTrue(cryptoPairOrders.isEmpty());
     verify(exchangeRepository).findOneByName(eq(CEX_EXCHANGE_NAME));
     verify(coinPairRepository).findByCoinPairIdentityExchangeId(eq(exchange.getId()));
-    verify(orderbookApi).getOrderbookForCryptoPair(eq("BTC"), eq("USD"));
+    verify(OrderBookApi).getOrderBookForCryptoPair(eq("BTC"), eq("USD"));
   }
 
   @Test

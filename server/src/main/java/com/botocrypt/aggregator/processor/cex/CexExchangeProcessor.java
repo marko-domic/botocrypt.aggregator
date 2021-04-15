@@ -6,8 +6,8 @@ import com.botocrypt.aggregator.model.Exchange;
 import com.botocrypt.aggregator.processor.ExchangeProcessor;
 import com.botocrypt.aggregator.repository.CoinPairRepository;
 import com.botocrypt.aggregator.repository.ExchangeRepository;
-import com.botocrypt.exchange.cex.io.api.OrderbookApi;
-import com.botocrypt.exchange.cex.io.dto.OrderbookDto;
+import com.botocrypt.exchange.cex.io.api.OrderBookApi;
+import com.botocrypt.exchange.cex.io.dto.OrderBookDto;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -28,17 +28,17 @@ public class CexExchangeProcessor implements ExchangeProcessor {
 
   private static final String COIN_PAIR_SEPARATOR = ":";
 
-  private final OrderbookApi orderbookApi;
+  private final OrderBookApi OrderBookApi;
   private final ExchangeRepository exchangeRepository;
   private final CoinPairRepository coinPairRepository;
 
   private final String CEX_EXCHANGE_NAME;
 
   @Autowired
-  public CexExchangeProcessor(OrderbookApi orderbookApi, ExchangeRepository exchangeRepository,
+  public CexExchangeProcessor(OrderBookApi orderBookApi, ExchangeRepository exchangeRepository,
       CoinPairRepository coinPairRepository,
       @Value("${aggregator.exchange.cex.name}") String cexExchangeName) {
-    this.orderbookApi = orderbookApi;
+    this.OrderBookApi = orderBookApi;
     this.exchangeRepository = exchangeRepository;
     this.coinPairRepository = coinPairRepository;
     this.CEX_EXCHANGE_NAME = cexExchangeName;
@@ -78,24 +78,24 @@ public class CexExchangeProcessor implements ExchangeProcessor {
     }
 
     final String[] coinSymbols = coinPair.getMarketSymbol().split(COIN_PAIR_SEPARATOR);
-    final Mono<OrderbookDto> monoResponse = orderbookApi
-        .getOrderbookForCryptoPair(coinSymbols[0], coinSymbols[1]);
+    final Mono<OrderBookDto> monoResponse = OrderBookApi
+        .getOrderBookForCryptoPair(coinSymbols[0], coinSymbols[1]);
 
     if (monoResponse == null) {
       log.warn("No data fetched from CEX.IO (monoResponse is null)");
       return null;
     }
 
-    final OrderbookDto orderbookDto = monoResponse.block();
-    if (orderbookDto == null) {
-      log.warn("No data fetched from CEX.IO (orderbookDto is null)");
+    final OrderBookDto OrderBookDto = monoResponse.block();
+    if (OrderBookDto == null) {
+      log.warn("No data fetched from CEX.IO (OrderBookDto is null)");
       return null;
     }
 
-    return convertOrderbookDtoToCryptoPairOrder(orderbookDto);
+    return convertOrderBookDtoToCryptoPairOrder(OrderBookDto);
   }
 
-  private CryptoPairOrder convertOrderbookDtoToCryptoPairOrder(OrderbookDto orderbookDto) {
+  private CryptoPairOrder convertOrderBookDtoToCryptoPairOrder(OrderBookDto OrderBookDto) {
     return null;
   }
 
