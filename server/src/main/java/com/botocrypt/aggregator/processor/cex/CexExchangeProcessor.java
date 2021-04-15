@@ -2,18 +2,14 @@ package com.botocrypt.aggregator.processor.cex;
 
 import com.botocrypt.aggregator.model.CoinPair;
 import com.botocrypt.aggregator.model.CryptoPairOrder;
-import com.botocrypt.aggregator.model.Exchange;
 import com.botocrypt.aggregator.processor.ExchangeProcessor;
-import com.botocrypt.aggregator.repository.CoinPairRepository;
-import com.botocrypt.aggregator.repository.ExchangeRepository;
+import com.botocrypt.aggregator.service.CoinPairService;
 import com.botocrypt.exchange.cex.io.api.OrderBookApi;
 import com.botocrypt.exchange.cex.io.dto.OrderBookDto;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,44 +24,28 @@ public class CexExchangeProcessor implements ExchangeProcessor {
 
   private static final String COIN_PAIR_SEPARATOR = ":";
 
-  private final OrderBookApi OrderBookApi;
-  private final ExchangeRepository exchangeRepository;
-  private final CoinPairRepository coinPairRepository;
+  private final OrderBookApi orderBookApi;
+  private final CoinPairService coinPairService;
 
   private final String CEX_EXCHANGE_NAME;
 
   @Autowired
-  public CexExchangeProcessor(OrderBookApi orderBookApi, ExchangeRepository exchangeRepository,
-      CoinPairRepository coinPairRepository,
+  public CexExchangeProcessor(OrderBookApi orderBookApi, CoinPairService coinPairService,
       @Value("${aggregator.exchange.cex.name}") String cexExchangeName) {
-    this.OrderBookApi = orderBookApi;
-    this.exchangeRepository = exchangeRepository;
-    this.coinPairRepository = coinPairRepository;
+    this.orderBookApi = orderBookApi;
+    this.coinPairService = coinPairService;
     this.CEX_EXCHANGE_NAME = cexExchangeName;
   }
 
   @Override
   public List<CryptoPairOrder> getCoinPrices() {
 
-    final Exchange exchange = exchangeRepository.findOneByName(CEX_EXCHANGE_NAME);
-    if (exchange == null) {
-      log.warn("{} exchange not found in repository.", CEX_EXCHANGE_NAME);
-      return Collections.emptyList();
-    }
-
-    final List<CoinPair> coinPairs = coinPairRepository
-        .findByCoinPairIdentityExchangeId(exchange.getId());
-    if (CollectionUtils.isEmpty(coinPairs)) {
-      log.warn("Coin pairs not found for {} exchange.", CEX_EXCHANGE_NAME);
-      return Collections.emptyList();
-    }
-
+    final List<CoinPair> coinPairs = coinPairService.getCoinPairsFromRepository(CEX_EXCHANGE_NAME);
     return coinPairs
         .stream()
         .map(this::generateCryptoPairOrderFromExchange)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
-
   }
 
   private CryptoPairOrder generateCryptoPairOrderFromExchange(CoinPair coinPair) {
@@ -78,7 +58,7 @@ public class CexExchangeProcessor implements ExchangeProcessor {
     }
 
     final String[] coinSymbols = coinPair.getMarketSymbol().split(COIN_PAIR_SEPARATOR);
-    final Mono<OrderBookDto> monoResponse = OrderBookApi
+    final Mono<OrderBookDto> monoResponse = orderBookApi
         .getOrderBookForCryptoPair(coinSymbols[0], coinSymbols[1]);
 
     if (monoResponse == null) {
