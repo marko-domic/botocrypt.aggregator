@@ -1,6 +1,5 @@
 package com.botocrypt.aggregator.repository;
 
-import com.botocrypt.aggregator.model.Coin;
 import com.botocrypt.aggregator.model.Exchange;
 import java.util.Collection;
 import java.util.List;

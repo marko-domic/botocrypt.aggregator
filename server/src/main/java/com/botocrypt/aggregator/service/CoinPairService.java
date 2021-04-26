@@ -6,6 +6,7 @@ import com.botocrypt.aggregator.repository.CoinPairRepository;
 import com.botocrypt.aggregator.repository.ExchangeRepository;
 import java.util.Collections;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class CoinPairService {
   }
 
   @Transactional
-  public List<CoinPair> getCoinPairsFromRepository(String exchangeName) {
+  public List<CoinPair> getCoinPairsFromRepository(@NotNull String exchangeName) {
 
     final Exchange exchange = exchangeRepository.findOneByName(exchangeName);
     if (exchange == null) {

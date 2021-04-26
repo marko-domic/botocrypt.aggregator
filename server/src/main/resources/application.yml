@@ -24,7 +24,7 @@ spring:
     console:
       enabled: true
   profiles:
-    active: service
+    active: ${SPRING_PROFILE:service}
 
 aggregator:
   scheduler:

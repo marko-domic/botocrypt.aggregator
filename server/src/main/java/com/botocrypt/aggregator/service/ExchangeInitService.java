@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @Profile("init")
-public class ExchangeInitService {
+public class ExchangeInitService implements InitService {
 
   private static final String[] EXCHANGES = {
       "CEX.IO"
@@ -25,6 +25,7 @@ public class ExchangeInitService {
     this.exchangeRepository = exchangeRepository;
   }
 
+  @Override
   @Transactional
   public void init() {
 

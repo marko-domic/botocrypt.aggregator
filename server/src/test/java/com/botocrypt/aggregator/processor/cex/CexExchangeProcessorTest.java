@@ -13,8 +13,7 @@ import com.botocrypt.aggregator.model.CoinPair;
 import com.botocrypt.aggregator.model.CoinPairIdentity;
 import com.botocrypt.aggregator.model.CryptoPairOrder;
 import com.botocrypt.aggregator.model.Exchange;
-import com.botocrypt.aggregator.repository.CoinPairRepository;
-import com.botocrypt.aggregator.repository.ExchangeRepository;
+import com.botocrypt.aggregator.service.CoinPairService;
 import com.botocrypt.exchange.cex.io.api.OrderBookApi;
 import com.botocrypt.exchange.cex.io.dto.OrderBookDto;
 import java.util.Collections;
@@ -30,23 +29,21 @@ import reactor.core.publisher.Mono;
 public class CexExchangeProcessorTest {
 
   private static final String FIRST_MARKET_SYMBOL = "BTC";
+  private static final String SECOND_MARKET_SYMBOL = "USD";
   private static final String CEX_EXCHANGE_NAME = "CEX.IO";
 
   @Mock
-  private OrderBookApi OrderBookApi;
+  private OrderBookApi orderBookApi;
 
   @Mock
-  private ExchangeRepository exchangeRepository;
-
-  @Mock
-  private CoinPairRepository coinPairRepository;
+  private CoinPairService coinPairService;
 
   private CexExchangeProcessor cexExchangeProcessor;
 
   @BeforeEach
   void setup() {
-    cexExchangeProcessor = new CexExchangeProcessor(OrderBookApi, exchangeRepository,
-        coinPairRepository, CEX_EXCHANGE_NAME);
+    cexExchangeProcessor = new CexExchangeProcessor(orderBookApi, coinPairService,
+        CEX_EXCHANGE_NAME);
   }
 
   @Test
@@ -60,12 +57,12 @@ public class CexExchangeProcessorTest {
 
     final Coin firstCoin = new Coin();
     firstCoin.setId(1);
-    firstCoin.setSymbol("BTC");
+    firstCoin.setSymbol(FIRST_MARKET_SYMBOL);
     firstCoin.setMinAmount(0.15);
 
     final Coin secondCoin = new Coin();
     secondCoin.setId(2);
-    secondCoin.setSymbol("USD");
+    secondCoin.setSymbol(SECOND_MARKET_SYMBOL);
     secondCoin.setMinAmount(10000);
 
     final CoinPairIdentity coinPairIdentity = new CoinPairIdentity();
@@ -80,22 +77,22 @@ public class CexExchangeProcessorTest {
     coinPair.setExchange(exchange);
     coinPair.setMarketSymbol(marketSymbolPair);
 
-    final OrderBookDto OrderBookDto = new OrderBookDto();
-    OrderBookDto.setPair(marketSymbolPair);
+    final OrderBookDto orderBookDto = new OrderBookDto();
+    orderBookDto.setPair(marketSymbolPair);
 
-    final Mono<OrderBookDto> monoResponse = Mono.just(OrderBookDto);
+    final Mono<OrderBookDto> monoResponse = Mono.just(orderBookDto);
 
-    doReturn(exchange).when(exchangeRepository).findOneByName(eq(CEX_EXCHANGE_NAME));
-    doReturn(Collections.singletonList(coinPair)).when(coinPairRepository)
-        .findByCoinPairIdentityExchangeId(eq(exchange.getId()));
-    doReturn(monoResponse).when(OrderBookApi).getOrderBookForCryptoPair(eq("BTC"), eq("USD"));
+    doReturn(Collections.singletonList(coinPair)).when(coinPairService)
+        .getCoinPairsFromRepository(eq(CEX_EXCHANGE_NAME));
+    doReturn(monoResponse).when(orderBookApi)
+        .getOrderBookForCryptoPair(eq(FIRST_MARKET_SYMBOL), eq(SECOND_MARKET_SYMBOL));
 
     final List<CryptoPairOrder> cryptoPairOrders = cexExchangeProcessor.getCoinPrices();
 
     assertTrue(cryptoPairOrders.isEmpty());
-    verify(exchangeRepository).findOneByName(eq(CEX_EXCHANGE_NAME));
-    verify(coinPairRepository).findByCoinPairIdentityExchangeId(eq(exchange.getId()));
-    verify(OrderBookApi).getOrderBookForCryptoPair(eq("BTC"), eq("USD"));
+    verify(coinPairService).getCoinPairsFromRepository(eq(CEX_EXCHANGE_NAME));
+    verify(orderBookApi)
+        .getOrderBookForCryptoPair(eq(FIRST_MARKET_SYMBOL), eq(SECOND_MARKET_SYMBOL));
   }
 
   @Test
@@ -103,13 +100,13 @@ public class CexExchangeProcessorTest {
 
     final String exceptionMessage = "Exception on findOneByName method call";
 
-    doThrow(new RuntimeException(exceptionMessage)).when(exchangeRepository)
-        .findOneByName(eq(CEX_EXCHANGE_NAME));
+    doThrow(new RuntimeException(exceptionMessage)).when(coinPairService)
+        .getCoinPairsFromRepository(eq(CEX_EXCHANGE_NAME));
 
     final Exception exception = assertThrows(RuntimeException.class,
         () -> cexExchangeProcessor.getCoinPrices());
 
     assertEquals(exceptionMessage, exception.getMessage());
-    verify(exchangeRepository).findOneByName(eq(CEX_EXCHANGE_NAME));
+    verify(coinPairService).getCoinPairsFromRepository(eq(CEX_EXCHANGE_NAME));
   }
 }

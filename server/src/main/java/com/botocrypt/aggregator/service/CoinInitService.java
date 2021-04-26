@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @Profile("init")
-public class CoinInitService {
+public class CoinInitService implements InitService {
 
   private static final CoinInfo[] COINS = {
       new CoinInfo("BTC", 0.15944),
@@ -27,6 +27,7 @@ public class CoinInitService {
     this.coinRepository = coinRepository;
   }
 
+  @Override
   @Transactional
   public void init() {
 
@@ -40,9 +41,10 @@ public class CoinInitService {
   private void insertCoinIfNotExists(CoinInfo coinInfo) {
     final Coin existingCoin = coinRepository.findOneBySymbol(coinInfo.getSymbol());
     if (existingCoin == null) {
-      final Coin coin = new Coin();
-      coin.setSymbol(coinInfo.getSymbol());
-      coin.setMinAmount(coinInfo.getQuantity());
+      final Coin coin = Coin.builder()
+          .symbol(coinInfo.getSymbol())
+          .minAmount(coinInfo.getQuantity())
+          .build();
       coinRepository.saveAndFlush(coin);
 
       log.info("{} coin saved in repository.", coinInfo.getSymbol());

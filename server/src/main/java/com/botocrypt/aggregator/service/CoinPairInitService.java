@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @Profile("init")
-public class CoinPairInitService {
+public class CoinPairInitService implements InitService {
 
   private static final String[] COINS = {
       "BTC",
@@ -49,6 +49,7 @@ public class CoinPairInitService {
     this.coinPairRepository = coinPairRepository;
   }
 
+  @Override
   @Transactional
   public void init() {
 
