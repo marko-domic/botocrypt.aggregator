@@ -6,6 +6,8 @@ import com.botocrypt.aggregator.processor.ExchangeProcessor;
 import com.botocrypt.aggregator.service.CoinPairService;
 import com.botocrypt.exchange.cex.io.api.OrderBookApi;
 import com.botocrypt.exchange.cex.io.dto.OrderBookDto;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -66,17 +68,68 @@ public class CexExchangeProcessor implements ExchangeProcessor {
       return null;
     }
 
-    final OrderBookDto OrderBookDto = monoResponse.block();
-    if (OrderBookDto == null) {
-      log.warn("No data fetched from CEX.IO (OrderBookDto is null)");
+    final OrderBookDto orderBookDto = monoResponse.block();
+    if (orderBookDto == null) {
+      log.warn("No data fetched from CEX.IO (orderBookDto is null)");
       return null;
     }
 
-    return convertOrderBookDtoToCryptoPairOrder(OrderBookDto);
+    return convertOrderBookDtoToCryptoPairOrder(orderBookDto, coinPair);
   }
 
-  private CryptoPairOrder convertOrderBookDtoToCryptoPairOrder(OrderBookDto OrderBookDto) {
-    return null;
+  private CryptoPairOrder convertOrderBookDtoToCryptoPairOrder(OrderBookDto orderBookDto,
+      CoinPair coinPair) {
+    final String firstCoinSymbol = coinPair.getFirstCoin().getSymbol();
+    final String secondCoinSymbol = coinPair.getSecondCoin().getSymbol();
+    final CoinPriceQuantity bidPriceQuantity = generateCoinPriceQuantity(orderBookDto.getBids(),
+        coinPair.getFirstCoin().getMinAmount());
+    final CoinPriceQuantity askPriceQuantity = generateCoinPriceQuantity(orderBookDto.getAsks(),
+        coinPair.getFirstCoin().getMinAmount());
+    return new CryptoPairOrder(
+        firstCoinSymbol,
+        secondCoinSymbol,
+        calculateAveragePrice(bidPriceQuantity.getPrice(), bidPriceQuantity.getQuantity()),
+        bidPriceQuantity.getQuantity(),
+        calculateAveragePrice(askPriceQuantity.getPrice(), askPriceQuantity.getQuantity()),
+        askPriceQuantity.getQuantity(),
+        CEX_EXCHANGE_NAME);
   }
 
+  private CoinPriceQuantity generateCoinPriceQuantity(List<List<BigDecimal>> orders,
+      double minQuantity) {
+
+    if (orders == null) {
+      log.warn("List of orders is not defined (it is null)");
+      return new CoinPriceQuantity(BigDecimal.ZERO, BigDecimal.ZERO);
+    }
+
+    BigDecimal price = BigDecimal.ZERO;
+    BigDecimal quantity = BigDecimal.ZERO;
+    final BigDecimal marginQuantity = BigDecimal.valueOf(minQuantity);
+
+    for (List<BigDecimal> order : orders) {
+      price = price.add(order.get(0).multiply(order.get(1)));
+      quantity = quantity.add(order.get(1));
+      if (quantity.compareTo(marginQuantity) > 0) {
+        break;
+      }
+    }
+
+    return new CoinPriceQuantity(price, quantity);
+  }
+
+  private BigDecimal calculateAveragePrice(BigDecimal price, BigDecimal quantity) {
+    if (quantity.compareTo(BigDecimal.ZERO) == 0) {
+      return BigDecimal.ZERO;
+    }
+
+    return price.divide(quantity, MathContext.DECIMAL64);
+  }
+
+  @lombok.Value
+  private static class CoinPriceQuantity {
+
+    BigDecimal price;
+    BigDecimal quantity;
+  }
 }

@@ -8,8 +8,9 @@ public class CryptoPairOrder {
 
   String firstCrypto;
   String secondCrypto;
-  BigDecimal bidPrice;
+  BigDecimal bidAveragePrice;
   BigDecimal bidQuantity;
-  BigDecimal askPrice;
+  BigDecimal askAveragePrice;
   BigDecimal askQuantity;
+  String exchange;
 }
