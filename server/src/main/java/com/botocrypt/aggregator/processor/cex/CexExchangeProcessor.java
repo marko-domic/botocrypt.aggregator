@@ -50,6 +50,11 @@ public class CexExchangeProcessor implements ExchangeProcessor {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public String exchangeName() {
+    return CEX_EXCHANGE_NAME;
+  }
+
   private CryptoPairOrder generateCryptoPairOrderFromExchange(CoinPair coinPair) {
 
     if (StringUtils.isEmpty(coinPair.getMarketSymbol())) {

@@ -6,4 +6,6 @@ import java.util.List;
 public interface ExchangeProcessor {
 
   List<CryptoPairOrder> getCoinPrices();
+
+  String exchangeName();
 }
