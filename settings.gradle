@@ -4,8 +4,9 @@ pluginManagement {
         id 'org.springframework.boot' version '2.4.2'
         id 'org.openapi.generator' version '5.1.0'
         id 'de.undercouch.download' version '4.1.1'
+        id 'com.google.protobuf' version '0.8.16'
     }
 }
 
 rootProject.name = 'aggregator'
-include 'server', 'cex_api'
+include 'server', 'cex_api', 'arbitrage_api'
