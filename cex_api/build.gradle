@@ -22,7 +22,7 @@ def basePackage = 'com.botocrypt.exchange.cex.io'
 def sourceOutputDir = project.projectDir
 
 task downloadFile(type: Download) {
-    src cex_io_api_spec_url
+    src "${cex_io_api_spec_url}/${cex_io_api_spec_version}/${cex_io_api_spec_file_name}"
     dest buildDir
     onlyIfModified true
 }
