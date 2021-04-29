@@ -51,7 +51,7 @@ openApiGenerate {
     ]
 }
 
-tasks.clean {
+clean {
     delete "${sourceOutputDir}${separator}.openapi-generator"
     delete "${sourceOutputDir}${separator}api"
     delete "${sourceOutputDir}${separator}gradle"
