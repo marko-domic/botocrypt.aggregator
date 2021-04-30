@@ -32,3 +32,7 @@ aggregator:
   exchange:
     cex:
       name: CEX.IO
+  arbitrage:
+    service:
+      host: ${ARBITRAGE_SERVICE_HOST:127.0.0.1}
+      port: ${ARBITRAGE_SERVICE_PORT:9090}

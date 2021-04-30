@@ -7,7 +7,6 @@ import com.botocrypt.exchange.cex.io.invoker.RFC3339DateFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.DateFormat;
 import java.util.TimeZone;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,6 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Slf4j
 @Configuration
 @Import({
     TickersApi.class,

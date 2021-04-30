@@ -5,7 +5,6 @@ import com.botocrypt.aggregator.scheduler.TickersJob;
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Slf4j
 @Configuration
 @Profile("service")
 public class TickersQuartzScheduler {
