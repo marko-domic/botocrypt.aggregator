@@ -74,7 +74,9 @@ public class CexExchangeProcessorTest {
     coinPairIdentity.setExchangeId(exchange.getId());
 
     final CoinPair coinPair = new CoinPair();
-    coinPair.setCoinPairIdentity(coinPairIdentity);
+    coinPair.setFirstCoinId(coinPairIdentity.getFirstCoinId());
+    coinPair.setSecondCoinId(coinPairIdentity.getSecondCoinId());
+    coinPair.setExchangeId(coinPairIdentity.getExchangeId());
     coinPair.setFirstCoin(firstCoin);
     coinPair.setSecondCoin(secondCoin);
     coinPair.setExchange(exchange);

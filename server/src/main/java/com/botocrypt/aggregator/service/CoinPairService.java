@@ -39,7 +39,7 @@ public class CoinPairService {
     }
 
     final List<CoinPair> coinPairs = coinPairRepository
-        .findByCoinPairIdentityExchangeId(exchange.getId());
+        .findByExchangeId(exchange.getId());
     if (CollectionUtils.isEmpty(coinPairs)) {
       log.warn("Coin pairs not found for {} exchange.", exchangeName);
       return Collections.emptyList();

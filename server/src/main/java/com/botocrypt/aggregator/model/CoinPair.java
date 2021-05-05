@@ -3,8 +3,9 @@ package com.botocrypt.aggregator.model;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
@@ -20,10 +21,20 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@IdClass(CoinPairIdentity.class)
 public class CoinPair implements Serializable {
 
-  @EmbeddedId
-  private CoinPairIdentity coinPairIdentity;
+  @Id
+  @Column(name = "first_coin_id")
+  private Integer firstCoinId;
+
+  @Id
+  @Column(name = "second_coin_id")
+  private Integer secondCoinId;
+
+  @Id
+  @Column(name = "exchange_id")
+  private Integer exchangeId;
 
   @OneToOne(cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn(name = "first_coin_id")
