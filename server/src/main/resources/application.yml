@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:h2:mem:aggregator}
+    url: ${DB_URL:jdbc:h2:mem:aggregator;DB_CLOSE_DELAY=-1}
     username: ${DB_USERNAME:user}
     password: ${DB_PASSWORD:password}
     hikari:
@@ -23,6 +23,7 @@ spring:
   h2:
     console:
       enabled: true
+      path: /h2-console
   profiles:
     active: ${SPRING_PROFILE:service}
 
@@ -32,6 +33,7 @@ aggregator:
   exchange:
     cex:
       name: CEX.IO
+      base-path: https://cex.io/api
   arbitrage:
     service:
       host: ${ARBITRAGE_SERVICE_HOST:127.0.0.1}

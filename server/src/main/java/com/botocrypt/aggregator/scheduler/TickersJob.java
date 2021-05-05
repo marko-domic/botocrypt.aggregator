@@ -6,10 +6,12 @@ import com.botocrypt.aggregator.processor.CryptoProcessor;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-@Component(SCOPE_PROTOTYPE)
+@Component
+@Scope(SCOPE_PROTOTYPE)
 @Profile("service")
 public class TickersJob extends QuartzJobBean {
 

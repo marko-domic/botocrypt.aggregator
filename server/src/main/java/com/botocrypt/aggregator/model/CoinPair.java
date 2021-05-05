@@ -1,13 +1,11 @@
 package com.botocrypt.aggregator.model;
 
-import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,31 +19,24 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(CoinPairIdentity.class)
-public class CoinPair implements Serializable {
+public class CoinPair {
 
-  @Id
-  @Column(name = "first_coin_id")
-  private Integer firstCoinId;
+  @EmbeddedId
+  private CoinPairIdentity id;
 
-  @Id
-  @Column(name = "second_coin_id")
-  private Integer secondCoinId;
-
-  @Id
-  @Column(name = "exchange_id")
-  private Integer exchangeId;
-
-  @OneToOne(cascade = CascadeType.ALL)
-  @PrimaryKeyJoinColumn(name = "first_coin_id")
+  @MapsId("firstCoinId")
+  @JoinColumn(name = "first_coin_id", referencedColumnName = "id")
+  @ManyToOne
   private Coin firstCoin;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @PrimaryKeyJoinColumn(name = "second_coin_id")
+  @MapsId("secondCoinId")
+  @JoinColumn(name = "second_coin_id", referencedColumnName = "id")
+  @ManyToOne
   private Coin secondCoin;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @PrimaryKeyJoinColumn(name = "exchange_id")
+  @MapsId("exchangeId")
+  @JoinColumn(name = "exchange_id", referencedColumnName = "id")
+  @ManyToOne
   private Exchange exchange;
 
   @NotNull

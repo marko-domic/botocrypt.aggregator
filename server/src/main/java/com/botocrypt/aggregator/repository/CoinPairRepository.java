@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CoinPairRepository extends JpaRepository<CoinPair, CoinPairIdentity> {
 
-  List<CoinPair> findByExchangeId(int exchangeId);
+  List<CoinPair> findByIdExchangeId(int exchangeId);
 }

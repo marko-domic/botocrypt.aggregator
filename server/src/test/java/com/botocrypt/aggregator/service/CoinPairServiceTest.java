@@ -6,11 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import com.botocrypt.aggregator.model.Coin;
 import com.botocrypt.aggregator.model.CoinPair;
+import com.botocrypt.aggregator.model.CoinPairIdentity;
 import com.botocrypt.aggregator.model.Exchange;
 import com.botocrypt.aggregator.repository.CoinPairRepository;
 import com.botocrypt.aggregator.repository.ExchangeRepository;
@@ -42,9 +43,7 @@ public class CoinPairServiceTest {
     final Coin btcCoin = Coin.builder().id(1).symbol("BTC").minAmount(0.15).build();
     final Coin usdCoin = Coin.builder().id(2).symbol("USD").minAmount(10000).build();
     final CoinPair coinPair = CoinPair.builder()
-        .firstCoinId(1)
-        .secondCoinId(2)
-        .exchangeId(1)
+        .id(CoinPairIdentity.builder().firstCoinId(1).secondCoinId(2).exchangeId(1).build())
         .firstCoin(btcCoin)
         .secondCoin(usdCoin)
         .exchange(exchange)
@@ -53,7 +52,7 @@ public class CoinPairServiceTest {
 
     doReturn(exchange).when(exchangeRepository).findOneByName(eq(EXCHANGE));
     doReturn(Collections.singletonList(coinPair)).when(coinPairRepository)
-        .findByExchangeId(eq(1));
+        .findByIdExchangeId(eq(1));
 
     List<CoinPair> coinPairs = coinPairService.getCoinPairsFromRepository(EXCHANGE);
 
@@ -62,7 +61,7 @@ public class CoinPairServiceTest {
     assertEquals(1, coinPairs.size());
     assertEquals(coinPair, coinPairs.get(0));
     verify(exchangeRepository).findOneByName(eq(EXCHANGE));
-    verify(coinPairRepository).findByExchangeId(eq(1));
+    verify(coinPairRepository).findByIdExchangeId(eq(1));
   }
 
   @Test
@@ -75,7 +74,7 @@ public class CoinPairServiceTest {
     assertNotNull(coinPairs);
     assertTrue(coinPairs.isEmpty());
     verify(exchangeRepository).findOneByName(eq(EXCHANGE));
-    verify(coinPairRepository, times(0)).findByExchangeId(eq(1));
+    verify(coinPairRepository, never()).findByIdExchangeId(eq(1));
   }
 
   @Test
@@ -83,14 +82,13 @@ public class CoinPairServiceTest {
     final Exchange exchange = Exchange.builder().id(1).name(EXCHANGE).build();
 
     doReturn(exchange).when(exchangeRepository).findOneByName(eq(EXCHANGE));
-    doReturn(Collections.emptyList()).when(coinPairRepository)
-        .findByExchangeId(eq(1));
+    doReturn(Collections.emptyList()).when(coinPairRepository).findByIdExchangeId(eq(1));
 
     List<CoinPair> coinPairs = coinPairService.getCoinPairsFromRepository(EXCHANGE);
 
     assertNotNull(coinPairs);
     assertTrue(coinPairs.isEmpty());
     verify(exchangeRepository).findOneByName(eq(EXCHANGE));
-    verify(coinPairRepository).findByExchangeId(eq(1));
+    verify(coinPairRepository).findByIdExchangeId(eq(1));
   }
 }

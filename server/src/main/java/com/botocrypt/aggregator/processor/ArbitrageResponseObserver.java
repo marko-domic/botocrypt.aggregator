@@ -8,10 +8,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component(SCOPE_PROTOTYPE)
+@Component
+@Scope(SCOPE_PROTOTYPE)
 @Profile("service")
 public class ArbitrageResponseObserver implements StreamObserver<CoinPairInfoResponse> {
 
@@ -37,14 +39,15 @@ public class ArbitrageResponseObserver implements StreamObserver<CoinPairInfoRes
 
   @Override
   public void onCompleted() {
-    log.info("Finished with receiving coin pairs.");
+    log.info("Arbitrage response completed");
     finishLatch.countDown();
   }
 
   public void waitForResponseToComplete() throws InterruptedException {
     if (finishLatch.await(1, TimeUnit.MINUTES)) {
+      log.info("Finished with receiving coin pairs");
       return;
     }
-    log.error("Something went wrong. Response have not finished with its stream.");
+    log.error("Something went wrong. Response have not finished with its stream");
   }
 }
