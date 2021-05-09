@@ -88,6 +88,8 @@ task integrationTest(type: Test) {
     shouldRunAfter test
 }
 
+check.dependsOn integrationTest
+
 idea {
     module {
         testSourceDirs += project.sourceSets.integrationTest.java.srcDirs
