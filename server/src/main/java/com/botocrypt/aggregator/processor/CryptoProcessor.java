@@ -50,11 +50,8 @@ public class CryptoProcessor {
         .map(cryptoPairOrder -> convertCryptoPairOrderToCoinPairInfo(cryptoPairOrder, cycleId))
         .forEach(arbitrageRequestObserver::onNext);
 
-    try {
-      arbitrageResponseObserver.waitForResponseToComplete();
-    } catch (InterruptedException e) {
-      log.error(e.getMessage(), e);
-    }
+    arbitrageRequestObserver.onCompleted();
+    handleArbitrageResponse(arbitrageResponseObserver);
 
     log.info("Fetching prices from exchanges finished.");
   }
@@ -78,5 +75,13 @@ public class CryptoProcessor {
         .setAskQuantity(cryptoPairOrder.getAskQuantity().doubleValue())
         .setExchange(cryptoPairOrder.getExchange())
         .build();
+  }
+
+  private void handleArbitrageResponse(ArbitrageResponseObserver arbitrageResponseObserver) {
+    try {
+      arbitrageResponseObserver.waitForResponseToComplete();
+    } catch (InterruptedException e) {
+      log.error(e.getMessage(), e);
+    }
   }
 }

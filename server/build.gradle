@@ -2,16 +2,26 @@ plugins {
     id 'java'
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
+    id 'idea'
 }
 
 group = 'com.botocrypt'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+sourceSets {
+    integrationTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
     }
+}
+
+configurations {
+    compileOnly.extendsFrom annotationProcessor
+    integrationTestImplementation.extendsFrom implementation
+    integrationTestRuntimOnly.extendsFrom runtimeOnly
+    integrationTestCompileOnly.extendsFrom compileOnly
+    integrationTestAnnotationProcessor.extendsFrom annotationProcessor
 }
 
 dependencies {
@@ -35,12 +45,54 @@ dependencies {
     implementation 'org.flywaydb:flyway-core:7.7.3'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'com.h2database:h2:1.4.200'
     testImplementation 'org.mockito:mockito-inline:3.9.0'
+
+    implementation 'mysql:mysql-connector-java:8.0.24'
 
     implementation "io.grpc:grpc-stub:${grpc_version}"
     implementation "io.grpc:grpc-protobuf:${grpc_version}"
+    implementation "io.grpc:grpc-services:${grpc_version}"
+
+    integrationTestImplementation "org.springframework.boot:spring-boot-starter-test:${spring_boot_version}"
+    integrationTestImplementation 'com.github.tomakehurst:wiremock:2.27.2'
+    integrationTestImplementation 'org.awaitility:awaitility:4.0.3'
+    integrationTestImplementation 'org.grpcmock:grpcmock-spring-boot:0.5.3'
+    integrationTestImplementation 'io.grpc:grpc-testing:1.37.0'
+    integrationTestImplementation 'io.grpc:grpc-testing-proto:1.37.0'
+    integrationTestImplementation 'org.mockito:mockito-inline:3.9.0'
+    integrationTestImplementation 'org.testcontainers:mysql:1.15.3'
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    integrationTestImplementation 'com.h2database:h2:1.4.200'
+    integrationTestCompileOnly 'org.projectlombok:lombok'
+    integrationTestAnnotationProcessor 'org.projectlombok:lombok'
+
 }
 
 test {
     useJUnitPlatform()
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs integration tests'
+    group = 'verification'
+
+    systemProperty 'spring.profiles.include', 'test'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    useJUnitPlatform {
+        includeTags 'integration'
+    }
+    shouldRunAfter test
+}
+
+check.dependsOn integrationTest
+
+idea {
+    module {
+        testSourceDirs += project.sourceSets.integrationTest.java.srcDirs
+        testSourceDirs += project.sourceSets.integrationTest.resources.srcDirs
+    }
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.DateFormat;
 import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,6 +29,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ExchangeConfiguration {
 
   private final Jackson2ObjectMapperBuilder objectMapperBuilder;
+
+  @Value("${aggregator.exchange.cex.base-path}")
+  private String basePath;
 
   @Autowired
   public ExchangeConfiguration(
@@ -54,6 +58,6 @@ public class ExchangeConfiguration {
     final DateFormat dateFormat = new RFC3339DateFormat();
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    return new ApiClient(webClient, objectMapper, dateFormat);
+    return new ApiClient(webClient, objectMapper, dateFormat).setBasePath(basePath);
   }
 }

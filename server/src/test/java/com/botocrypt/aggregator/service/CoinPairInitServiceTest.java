@@ -39,10 +39,13 @@ public class CoinPairInitServiceTest {
   };
 
   private static final CoinPair[] COIN_PAIRS = {
-      CoinPair.builder().firstCoinId(COIN_PAIR_IDENTITIES[0].getFirstCoinId())
-          .secondCoinId(COIN_PAIR_IDENTITIES[0].getSecondCoinId())
-          .exchangeId(COIN_PAIR_IDENTITIES[0].getExchangeId()).firstCoin(COINS[0])
-          .secondCoin(COINS[1]).exchange(EXCHANGES[0]).marketSymbol("BTC:USD").build()
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[0])
+          .firstCoin(COINS[0])
+          .secondCoin(COINS[1])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("BTC:USD")
+          .build()
   };
 
   @Mock
