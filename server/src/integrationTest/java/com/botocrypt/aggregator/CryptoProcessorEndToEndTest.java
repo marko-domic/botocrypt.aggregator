@@ -16,9 +16,9 @@ import com.botocrypt.aggregator.processor.InitProcessor;
 import com.botocrypt.aggregator.repository.CoinPairRepository;
 import com.botocrypt.aggregator.repository.CoinRepository;
 import com.botocrypt.aggregator.repository.ExchangeRepository;
-import com.botocrypt.arbitrage.api.Arbitrage.CoinPairInfo;
-import com.botocrypt.arbitrage.api.Arbitrage.CoinPairInfoResponse;
-import com.botocrypt.arbitrage.api.Arbitrage.CoinPairOrder;
+import com.botocrypt.arbitrage.api.Arbitrage.CoinPairDto;
+import com.botocrypt.arbitrage.api.Arbitrage.CoinPairOrderDto;
+import com.botocrypt.arbitrage.api.Arbitrage.CoinPairResponseDto;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import io.grpc.stub.StreamObserver;
@@ -63,7 +63,7 @@ public class CryptoProcessorEndToEndTest {
 
   private static WireMockServer cexMockServer;
 
-  private static final CoinPairInfoHandler coinPairInfoHandler = new CoinPairInfoHandler();
+  private static final CoinPairDtoHandler CoinPairDtoHandler = new CoinPairDtoHandler();
 
   @Autowired
   private InitProcessor initProcessor;
@@ -83,8 +83,8 @@ public class CryptoProcessorEndToEndTest {
     GrpcMock.configureFor(grpcMock(GRPC_SERVICE_MOCK_PORT).build().start());
     stubFor(clientStreamingMethod(getSendCoinPairInfoFromExchangeMethod())
         .willProxyTo(responseObserver -> {
-          coinPairInfoHandler.setCoinPairInfoResponseObserver(responseObserver);
-          return coinPairInfoHandler;
+          CoinPairDtoHandler.setCoinPairDtoResponseObserver(responseObserver);
+          return CoinPairDtoHandler;
         })
     );
 
@@ -116,15 +116,15 @@ public class CryptoProcessorEndToEndTest {
     assertEquals(1, exchangeRepository.count());
     assertEquals(1, coinPairRepository.count());
 
-    await().atMost(6, TimeUnit.SECONDS).until(coinPairInfoHandler::grpcServerResponded);
+    await().atMost(6, TimeUnit.SECONDS).until(CoinPairDtoHandler::grpcServerResponded);
 
-    final List<CoinPairInfo> coinPairs = coinPairInfoHandler.getCoinPairs();
+    final List<CoinPairDto> coinPairs = CoinPairDtoHandler.getCoinPairs();
     assertEquals(1, coinPairs.size());
 
-    final CoinPairInfo coinPairInfo = coinPairs.get(0);
-    assertEquals("CEX.IO", coinPairInfo.getExchange());
+    final CoinPairDto CoinPairDto = coinPairs.get(0);
+    assertEquals("CEX.IO", CoinPairDto.getExchange());
 
-    final CoinPairOrder coinPairOrder = coinPairInfo.getCoinPairOrder();
+    final CoinPairOrderDto coinPairOrder = CoinPairDto.getCoinPairOrder();
     assertNotNull(coinPairOrder);
     assertEquals("BTC", coinPairOrder.getFirstCoin());
     assertEquals("USD", coinPairOrder.getSecondCoin());
@@ -135,18 +135,18 @@ public class CryptoProcessorEndToEndTest {
     assertEquals("CEX.IO", coinPairOrder.getExchange());
   }
 
-  private static class CoinPairInfoHandler implements StreamObserver<CoinPairInfo> {
+  private static class CoinPairDtoHandler implements StreamObserver<CoinPairDto> {
 
     @Getter
-    private final List<CoinPairInfo> coinPairs = new ArrayList<>();
+    private final List<CoinPairDto> coinPairs = new ArrayList<>();
 
     private final CountDownLatch finishLatch = new CountDownLatch(1);
 
     @Setter
-    private StreamObserver<CoinPairInfoResponse> coinPairInfoResponseObserver;
+    private StreamObserver<CoinPairResponseDto> CoinPairDtoResponseObserver;
 
     @Override
-    public void onNext(CoinPairInfo value) {
+    public void onNext(CoinPairDto value) {
       coinPairs.add(value);
     }
 
@@ -158,12 +158,12 @@ public class CryptoProcessorEndToEndTest {
 
     @Override
     public void onCompleted() {
-      final CoinPairInfoResponse coinPairInfoResponse = CoinPairInfoResponse.newBuilder()
+      final CoinPairResponseDto CoinPairDtoResponse = CoinPairResponseDto.newBuilder()
           .setCycleId(coinPairs.isEmpty() ? null : coinPairs.get(0).getCycleId())
           .setStatus("SUCCESS")
           .build();
-      coinPairInfoResponseObserver.onNext(coinPairInfoResponse);
-      coinPairInfoResponseObserver.onCompleted();
+      CoinPairDtoResponseObserver.onNext(CoinPairDtoResponse);
+      CoinPairDtoResponseObserver.onCompleted();
       finishLatch.countDown();
     }
 

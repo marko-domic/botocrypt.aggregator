@@ -1,8 +1,8 @@
 package com.botocrypt.aggregator.processor;
 
 import com.botocrypt.aggregator.model.CryptoPairOrder;
-import com.botocrypt.arbitrage.api.Arbitrage.CoinPairInfo;
-import com.botocrypt.arbitrage.api.Arbitrage.CoinPairOrder;
+import com.botocrypt.arbitrage.api.Arbitrage.CoinPairDto;
+import com.botocrypt.arbitrage.api.Arbitrage.CoinPairOrderDto;
 import com.botocrypt.arbitrage.api.ArbitrageServiceGrpc.ArbitrageServiceStub;
 import io.grpc.stub.StreamObserver;
 import java.util.List;
@@ -42,12 +42,12 @@ public class CryptoProcessor {
     final ArbitrageServiceStub arbitrageServiceClient = arbitrageServiceClientProvider.getObject();
     final ArbitrageResponseObserver arbitrageResponseObserver = arbitrageResponseObserverProvider
         .getObject();
-    final StreamObserver<CoinPairInfo> arbitrageRequestObserver = arbitrageServiceClient
+    final StreamObserver<CoinPairDto> arbitrageRequestObserver = arbitrageServiceClient
         .sendCoinPairInfoFromExchange(arbitrageResponseObserver);
 
     exchangeProcessors.stream()
         .flatMap(exchangeProcessor -> exchangeProcessor.getCoinPrices().stream())
-        .map(cryptoPairOrder -> convertCryptoPairOrderToCoinPairInfo(cryptoPairOrder, cycleId))
+        .map(cryptoPairOrder -> convertCryptoPairOrderToCoinPairDto(cryptoPairOrder, cycleId))
         .forEach(arbitrageRequestObserver::onNext);
 
     arbitrageRequestObserver.onCompleted();
@@ -56,17 +56,17 @@ public class CryptoProcessor {
     log.info("Fetching prices from exchanges finished.");
   }
 
-  private CoinPairInfo convertCryptoPairOrderToCoinPairInfo(CryptoPairOrder cryptoPairOrder,
+  private CoinPairDto convertCryptoPairOrderToCoinPairDto(CryptoPairOrder cryptoPairOrder,
       String cycleId) {
-    return CoinPairInfo.newBuilder()
+    return CoinPairDto.newBuilder()
         .setCycleId(cycleId)
         .setExchange(cryptoPairOrder.getExchange())
         .setCoinPairOrder(createCoinPairOrder(cryptoPairOrder))
         .build();
   }
 
-  private CoinPairOrder createCoinPairOrder(CryptoPairOrder cryptoPairOrder) {
-    return CoinPairOrder.newBuilder()
+  private CoinPairOrderDto createCoinPairOrder(CryptoPairOrder cryptoPairOrder) {
+    return CoinPairOrderDto.newBuilder()
         .setFirstCoin(cryptoPairOrder.getFirstCrypto())
         .setSecondCoin(cryptoPairOrder.getSecondCrypto())
         .setBidAveragePrice(cryptoPairOrder.getBidAveragePrice().doubleValue())

@@ -2,7 +2,7 @@ package com.botocrypt.aggregator.processor;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
-import com.botocrypt.arbitrage.api.Arbitrage.CoinPairInfoResponse;
+import com.botocrypt.arbitrage.api.Arbitrage.CoinPairResponseDto;
 import io.grpc.stub.StreamObserver;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(SCOPE_PROTOTYPE)
 @Profile("service")
-public class ArbitrageResponseObserver implements StreamObserver<CoinPairInfoResponse> {
+public class ArbitrageResponseObserver implements StreamObserver<CoinPairResponseDto> {
 
   private final CountDownLatch finishLatch;
 
@@ -24,7 +24,7 @@ public class ArbitrageResponseObserver implements StreamObserver<CoinPairInfoRes
   }
 
   @Override
-  public void onNext(CoinPairInfoResponse value) {
+  public void onNext(CoinPairResponseDto value) {
     log.info("Coin pairs received in cycle: {} and with status: {}", value.getCycleId(),
         value.getStatus());
   }

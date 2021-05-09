@@ -14,7 +14,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.botocrypt.aggregator.model.CryptoPairOrder;
-import com.botocrypt.arbitrage.api.Arbitrage.CoinPairInfo;
+import com.botocrypt.arbitrage.api.Arbitrage.CoinPairDto;
 import com.botocrypt.arbitrage.api.ArbitrageServiceGrpc.ArbitrageServiceStub;
 import io.grpc.stub.StreamObserver;
 import java.math.BigDecimal;
@@ -62,7 +62,7 @@ public class CryptoProcessorTest {
         ObjectProvider.class);
     final ArbitrageResponseObserver arbitrageResponseObserver = mock(
         ArbitrageResponseObserver.class);
-    final StreamObserver<CoinPairInfo> arbitrageRequestObserver = mock(StreamObserver.class);
+    final StreamObserver<CoinPairDto> arbitrageRequestObserver = mock(StreamObserver.class);
     final Supplier<String> cycleIdSupplier = mock(Supplier.class);
 
     final List<ExchangeProcessor> exchangeProcessors = Arrays
@@ -75,7 +75,7 @@ public class CryptoProcessorTest {
     doReturn(arbitrageResponseObserver).when(arbitrageResponseObserverProvider).getObject();
     doReturn(arbitrageRequestObserver).when(arbitrageServiceClient)
         .sendCoinPairInfoFromExchange(eq(arbitrageResponseObserver));
-    doNothing().when(arbitrageRequestObserver).onNext(any(CoinPairInfo.class));
+    doNothing().when(arbitrageRequestObserver).onNext(any(CoinPairDto.class));
     doReturn(orders1).when(exchangeProcessor1).getCoinPrices();
     doReturn(orders2).when(exchangeProcessor2).getCoinPrices();
     doNothing().when(arbitrageResponseObserver).waitForResponseToComplete();
@@ -88,7 +88,7 @@ public class CryptoProcessorTest {
     verify(arbitrageServiceClient).sendCoinPairInfoFromExchange(eq(arbitrageResponseObserver));
     verify(exchangeProcessor1).getCoinPrices();
     verify(exchangeProcessor2).getCoinPrices();
-    verify(arbitrageRequestObserver, times(4)).onNext(any(CoinPairInfo.class));
+    verify(arbitrageRequestObserver, times(4)).onNext(any(CoinPairDto.class));
     verify(arbitrageResponseObserver).waitForResponseToComplete();
   }
 
@@ -148,7 +148,7 @@ public class CryptoProcessorTest {
         ObjectProvider.class);
     final ArbitrageResponseObserver arbitrageResponseObserver = mock(
         ArbitrageResponseObserver.class);
-    final StreamObserver<CoinPairInfo> arbitrageRequestObserver = mock(StreamObserver.class);
+    final StreamObserver<CoinPairDto> arbitrageRequestObserver = mock(StreamObserver.class);
     final Supplier<String> cycleIdSupplier = mock(Supplier.class);
 
     final List<ExchangeProcessor> exchangeProcessors = Arrays
@@ -161,7 +161,7 @@ public class CryptoProcessorTest {
     doReturn(arbitrageResponseObserver).when(arbitrageResponseObserverProvider).getObject();
     doReturn(arbitrageRequestObserver).when(arbitrageServiceClient)
         .sendCoinPairInfoFromExchange(eq(arbitrageResponseObserver));
-    doNothing().when(arbitrageRequestObserver).onNext(any(CoinPairInfo.class));
+    doNothing().when(arbitrageRequestObserver).onNext(any(CoinPairDto.class));
     doReturn(orders1).when(exchangeProcessor1).getCoinPrices();
     doReturn(orders2).when(exchangeProcessor2).getCoinPrices();
     doThrow(new InterruptedException("Exception on waitForResponseToComplete method call"))
@@ -175,7 +175,7 @@ public class CryptoProcessorTest {
     verify(arbitrageServiceClient).sendCoinPairInfoFromExchange(eq(arbitrageResponseObserver));
     verify(exchangeProcessor1).getCoinPrices();
     verify(exchangeProcessor2).getCoinPrices();
-    verify(arbitrageRequestObserver, times(4)).onNext(any(CoinPairInfo.class));
+    verify(arbitrageRequestObserver, times(4)).onNext(any(CoinPairDto.class));
     verify(arbitrageResponseObserver).waitForResponseToComplete();
   }
 
@@ -195,7 +195,7 @@ public class CryptoProcessorTest {
         ObjectProvider.class);
     final ArbitrageResponseObserver arbitrageResponseObserver = mock(
         ArbitrageResponseObserver.class);
-    final StreamObserver<CoinPairInfo> arbitrageRequestObserver = mock(StreamObserver.class);
+    final StreamObserver<CoinPairDto> arbitrageRequestObserver = mock(StreamObserver.class);
     final Supplier<String> cycleIdSupplier = mock(Supplier.class);
 
     final List<ExchangeProcessor> exchangeProcessors = Arrays
@@ -220,7 +220,7 @@ public class CryptoProcessorTest {
     verify(arbitrageServiceClient).sendCoinPairInfoFromExchange(eq(arbitrageResponseObserver));
     verify(exchangeProcessor1).getCoinPrices();
     verify(exchangeProcessor2).getCoinPrices();
-    verify(arbitrageRequestObserver, never()).onNext(any(CoinPairInfo.class));
+    verify(arbitrageRequestObserver, never()).onNext(any(CoinPairDto.class));
     verify(arbitrageResponseObserver).waitForResponseToComplete();
   }
 }
