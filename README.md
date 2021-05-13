@@ -10,6 +10,12 @@ An overview of Botocrypt architecture looks something like this:
 
 The main purpose of Aggregator service is to fetch all necessary data regarding cryptocurrencies from exchanges (their prices, matching pairs...), group and send them to the Arbitrage service. There is no advanced logic or any other calculation happening in this service.
 
+## Registered exchanges
+
+Exchanges from where Aggregator service receives cryptocurrency orders are:
+
+* [CEX.IO](https://cex.io/)
+
 ## Running the application locally
 
 There are several ways to run a Botocrypt Aggregator service and initializer on your local machine.
