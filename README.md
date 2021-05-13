@@ -4,7 +4,11 @@ A part of the botocrypt platform, the main purpose of this service is to collect
 
 ## Architecture overview
 
+An overview of Botocrypt architecture looks something like this:
+
 ![Botocrypt architecture preview](resources/botocrypt_architecture.png)
+
+The main purpose of Aggregator service is to fetch all necessary data regarding cryptocurrencies from exchanges (their prices, matching pairs...), group and send them to the Arbitrage service. There is no advanced logic or any other calculation happening in this service.
 
 ## Running the application locally
 
