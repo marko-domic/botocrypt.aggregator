@@ -16,6 +16,13 @@ Exchanges from where Aggregator service receives cryptocurrency orders are:
 
 * [CEX.IO](https://cex.io/)
 
+## Registered currencies
+
+Currencies with which Aggregator service works are:
+
+* BTC
+* USD
+
 ## Running the application locally
 
 There are several ways to run a Botocrypt Aggregator service and initializer on your local machine.
