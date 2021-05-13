@@ -116,3 +116,7 @@ Starting a service could be done by executing the `main` method in the `com.boto
 ```shell
 ./gradlew bootRun
 ```
+
+## License
+
+GPL-3.0 © [Marko Domić](https://github.com/marko-domic)
