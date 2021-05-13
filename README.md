@@ -56,17 +56,62 @@ Currencies with which Aggregator service works are:
 * [git](https://git-scm.com/) - Free and Open-Source distributed version control system.
 * [Docker](https://www.docker.com/) - A set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
 
-## Running the application locally
+## Installation, Build and Run
 
-There are several ways to run a Botocrypt Aggregator service and initializer on your local machine.
+### Project download
 
-Before starting Aggregator, it needs to be initialized with required data. It could be done by execute the `main` method in the `com.botocrypt.aggregator.InitRunner` with environment variable `SPRING_PROFILE=init` class from your IDE, or use [Spring Boot Gradle plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins.html#build-tool-plugins-gradle-plugin) like so:
+Downloading Arbitrage service Spring Boot project on local machine can be done by executing command:
+
+```shell
+git clone https://github.com/marko-domic/botocrypt.aggregator.git
+```
+
+### Project build
+
+Whole project was developed by [Gradle build tool](https://gradle.org/). Building and testing it is done with the help of the same tool, by executing command:
+
+```shell
+./gradlew clean build
+```
+
+This command will trigger project build, all unit and integration tests of the project, which are required steps in building phase.
+
+### Database setup
+
+By default, Arbitrage service uses embedded [H2 in-memory database](https://www.h2database.com/html/main.html). Changing it could be done in 2 ways:
+
+1. By defining `DB_URL` environment variable
+2. By setting `spring.datasource.url` spring configuration
+
+Similar, DB user credentials can be set also in 2 ways:
+
+1. By defining `DB_USERNAME` and `DB_PASSWORD` environment variables
+2. By setting `spring.datasource.username` and `spring.datasource.password` spring configurations
+
+Service is relying on relational databases only, which can be:
+
+* [H2 in-memory database](https://www.h2database.com/html/main.html)
+* [MySQL](https://www.mysql.com/)
+
+### Build Docker image
+
+Creating Docker image of a service can be done by executing command:
+
+```shell
+./gradlew bootBuildImage --imageName=botocrypt/aggregator
+```
+
+### Running the application locally
+
+There are several ways to start a service and initializer on your local machine.
+
+Before starting Aggregator, it needs to be initialized with required data. It could be done by execute the `main` method in the `com.botocrypt.aggregator.InitRunner` with environment variable `SPRING_PROFILE=init` class from IDE, or use [Spring Boot Gradle plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins.html#build-tool-plugins-gradle-plugin) like so:
 
 ```shell
 ./gradlew bootRun --args='--spring.profiles.active=init'
 ```
 
-Starting a service could be done by executing the `main` method in the `com.botocrypt.aggregator.Application` class from your IDE or running Gradle plugin command:
+Starting a service could be done by executing the `main` method in the `com.botocrypt.aggregator.Application` class from IDE or running Gradle plugin command:
 
 ```shell
 ./gradlew bootRun
