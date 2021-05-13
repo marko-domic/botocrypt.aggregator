@@ -23,6 +23,34 @@ Currencies with which Aggregator service works are:
 * BTC
 * USD
 
+## Technology Stack
+
+### Data
+
+|                 Technology                                               |                              Description                        |
+|--------------------------------------------------------------------------|-----------------------------------------------------------------|
+|<a href="https://flywaydb.org/">Flyway</a>                                |Version control for database                                     |
+|<a href="https://www.mysql.com/">MySQL</a>                                |Open-Source Relational Database Management System                |
+|<a href="https://www.h2database.com/html/main.html">H2 Database Engine</a>|Java SQL database. Embedded and server modes; in-memory databases|
+
+### Server
+
+|                                            Technology                                               |                              Description                                     |
+|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+|<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JDK</a>|Java™ Platform, Standard Edition Development Kit                              |
+|<a href="https://spring.io/projects/spring-boot">Spring Boot</a>                                     |Framework to ease the bootstrapping and development of new Spring Applications|
+|<a href="https://gradle.org/">Gradle</a>                                                             |Build Tool                                                                    |
+
+###  Libraries and Plugins
+
+* [Quartz](http://www.quartz-scheduler.org/) - Open source job scheduling library that can be integrated within virtually any Java application.
+* [Swagger](https://swagger.io/) - Open-Source software framework backed by a large ecosystem of tools that helps developers design, build, document, and consume RESTful Web services.
+* [Lombok](https://projectlombok.org/) - Never write another getter or equals method again, with one annotation your class has a fully featured builder, Automate your logging variables, and much more.
+* [gRPC](https://grpc.io/) - Modern open source high performance Remote Procedure Call (RPC) framework that can run in any environment. It can efficiently connect services in and across data centers.
+* [gRPC Mock](https://github.com/Fadelis/grpcmock) - A gRPC Java testing tool to easily mock endpoints of gRPC services for IT or Unit testing. The tool follows a similar DSL type of structure to HTTP mocking service WireMock.
+* [Mockito](https://site.mockito.org/) - Open source testing framework for Java which allows the creation of test double objects (mock objects) in automated unit tests for the purpose of test-driven development (TDD) or behavior-driven development (BDD).
+* [WireMock](http://wiremock.org/) - Simulator for HTTP-based APIs. It constructs a HTTP server that we could connect to as we would to an actual web service. When a WireMock server is in action, we can set up expectations, call the service, and then verify its behaviors.
+
 ## Running the application locally
 
 There are several ways to run a Botocrypt Aggregator service and initializer on your local machine.
