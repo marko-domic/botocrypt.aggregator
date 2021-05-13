@@ -51,6 +51,11 @@ Currencies with which Aggregator service works are:
 * [Mockito](https://site.mockito.org/) - Open source testing framework for Java which allows the creation of test double objects (mock objects) in automated unit tests for the purpose of test-driven development (TDD) or behavior-driven development (BDD).
 * [WireMock](http://wiremock.org/) - Simulator for HTTP-based APIs. It constructs a HTTP server that we could connect to as we would to an actual web service. When a WireMock server is in action, we can set up expectations, call the service, and then verify its behaviors.
 
+### Other
+
+* [git](https://git-scm.com/) - Free and Open-Source distributed version control system.
+* [Docker](https://www.docker.com/) - A set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
+
 ## Running the application locally
 
 There are several ways to run a Botocrypt Aggregator service and initializer on your local machine.
