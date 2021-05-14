@@ -17,7 +17,8 @@ public class CoinInitService implements InitService {
 
   private static final CoinInfo[] COINS = {
       new CoinInfo("BTC", 0.15944),
-      new CoinInfo("USD", 10000)
+      new CoinInfo("USD", 10000),
+      new CoinInfo("ETH", 3)
   };
 
   private final CoinRepository coinRepository;

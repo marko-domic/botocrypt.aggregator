@@ -96,7 +96,17 @@ public class CryptoProcessorEndToEndTest {
     cexMockServer.addStubMapping(cexMockServer.stubFor(
         get(urlPathMatching("/api/order_book/BTC/USD")).atPriority(1).willReturn(
             aResponse().withStatus(200).withHeader("Content-Type", "text/json")
-                .withBodyFile("orders/order_1.json"))));
+                .withBodyFile("orders/cex/order_1.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/ETH/USD")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_2.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/ETH/BTC")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_3.json"))));
   }
 
   @AfterAll
@@ -112,19 +122,19 @@ public class CryptoProcessorEndToEndTest {
 
     // Check if repository is initialized with necessary data
     initProcessor.initRepositoryWithNecessaryData();
-    assertEquals(2, coinRepository.count());
+    assertEquals(3, coinRepository.count());
     assertEquals(1, exchangeRepository.count());
-    assertEquals(1, coinPairRepository.count());
+    assertEquals(3, coinPairRepository.count());
 
     await().atMost(6, TimeUnit.SECONDS).until(CoinPairDtoHandler::grpcServerResponded);
 
     final List<CoinPairDto> coinPairs = CoinPairDtoHandler.getCoinPairs();
-    assertEquals(1, coinPairs.size());
+    assertEquals(3, coinPairs.size());
 
-    final CoinPairDto CoinPairDto = coinPairs.get(0);
-    assertEquals("CEX.IO", CoinPairDto.getExchange());
+    final CoinPairDto firstCoinPairDto = coinPairs.get(0);
+    assertEquals("CEX.IO", firstCoinPairDto.getExchange());
 
-    final CoinPairOrderDto coinPairOrder = CoinPairDto.getCoinPairOrder();
+    final CoinPairOrderDto coinPairOrder = firstCoinPairDto.getCoinPairOrder();
     assertNotNull(coinPairOrder);
     assertEquals("BTC", coinPairOrder.getFirstCoin());
     assertEquals("USD", coinPairOrder.getSecondCoin());
@@ -133,6 +143,32 @@ public class CryptoProcessorEndToEndTest {
     assertEquals(57516.42004921007, coinPairOrder.getAskAveragePrice());
     assertEquals(0.64864775, coinPairOrder.getAskQuantity());
     assertEquals("CEX.IO", coinPairOrder.getExchange());
+
+    final CoinPairDto secondCoinPairDto = coinPairs.get(1);
+    assertEquals("CEX.IO", secondCoinPairDto.getExchange());
+
+    final CoinPairOrderDto secondCoinPairOrder = secondCoinPairDto.getCoinPairOrder();
+    assertNotNull(secondCoinPairOrder);
+    assertEquals("ETH", secondCoinPairOrder.getFirstCoin());
+    assertEquals("USD", secondCoinPairOrder.getSecondCoin());
+    assertEquals(3952.680320793128, secondCoinPairOrder.getBidAveragePrice());
+    assertEquals(5.056031, secondCoinPairOrder.getBidQuantity());
+    assertEquals(3958.409991182018, secondCoinPairOrder.getAskAveragePrice());
+    assertEquals(3.719672, secondCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", secondCoinPairOrder.getExchange());
+
+    final CoinPairDto thirdCoinPairDto = coinPairs.get(2);
+    assertEquals("CEX.IO", thirdCoinPairDto.getExchange());
+
+    final CoinPairOrderDto thirdCoinPairOrder = thirdCoinPairDto.getCoinPairOrder();
+    assertNotNull(thirdCoinPairOrder);
+    assertEquals("ETH", thirdCoinPairOrder.getFirstCoin());
+    assertEquals("BTC", thirdCoinPairOrder.getSecondCoin());
+    assertEquals(0.07796275676751092, thirdCoinPairOrder.getBidAveragePrice());
+    assertEquals(6.373392, thirdCoinPairOrder.getBidQuantity());
+    assertEquals(0.07806816867106742, thirdCoinPairOrder.getAskAveragePrice());
+    assertEquals(6.383454, thirdCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", thirdCoinPairOrder.getExchange());
   }
 
   private static class CoinPairDtoHandler implements StreamObserver<CoinPairDto> {

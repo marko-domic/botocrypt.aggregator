@@ -22,6 +22,7 @@ Currencies with which Aggregator service works are:
 
 * BTC
 * USD
+* ETH
 
 ## Technology Stack
 
