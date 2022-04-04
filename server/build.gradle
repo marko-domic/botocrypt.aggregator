@@ -40,15 +40,15 @@ dependencies {
     implementation "org.springframework:spring-context-support:${spring_version}"
     implementation 'com.h2database:h2:1.4.200'
     implementation "org.springframework:spring-messaging:${spring_version}"
-    implementation 'commons-io:commons-io:2.8.0'
+    implementation 'commons-io:commons-io:2.11.0'
     implementation "org.springframework:spring-webmvc:${spring_version}"
-    implementation 'org.flywaydb:flyway-core:7.7.3'
+    implementation 'org.flywaydb:flyway-core:8.5.4'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'com.h2database:h2:1.4.200'
-    testImplementation 'org.mockito:mockito-inline:3.9.0'
+    testImplementation 'org.mockito:mockito-inline:4.3.1'
 
-    implementation 'mysql:mysql-connector-java:8.0.24'
+    implementation 'mysql:mysql-connector-java:8.0.28'
 
     implementation "io.grpc:grpc-stub:${grpc_version}"
     implementation "io.grpc:grpc-protobuf:${grpc_version}"
@@ -56,12 +56,12 @@ dependencies {
 
     integrationTestImplementation "org.springframework.boot:spring-boot-starter-test:${spring_boot_version}"
     integrationTestImplementation 'com.github.tomakehurst:wiremock:2.27.2'
-    integrationTestImplementation 'org.awaitility:awaitility:4.0.3'
-    integrationTestImplementation 'org.grpcmock:grpcmock-spring-boot:0.5.3'
-    integrationTestImplementation 'io.grpc:grpc-testing:1.37.0'
-    integrationTestImplementation 'io.grpc:grpc-testing-proto:1.37.0'
-    integrationTestImplementation 'org.mockito:mockito-inline:3.9.0'
-    integrationTestImplementation 'org.testcontainers:mysql:1.15.3'
+    integrationTestImplementation 'org.awaitility:awaitility:4.2.0'
+    integrationTestImplementation 'org.grpcmock:grpcmock-spring-boot:0.7.5'
+    integrationTestImplementation "io.grpc:grpc-testing:${grpc_version}"
+    integrationTestImplementation "io.grpc:grpc-testing-proto:${grpc_version}"
+    integrationTestImplementation 'org.mockito:mockito-inline:4.3.1'
+    integrationTestImplementation 'org.testcontainers:mysql:1.16.3'
     integrationTestImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     integrationTestImplementation 'com.h2database:h2:1.4.200'
     integrationTestCompileOnly 'org.projectlombok:lombok'

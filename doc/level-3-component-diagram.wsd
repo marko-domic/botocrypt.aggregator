@@ -1,0 +1,40 @@
+@startuml C4_Elements
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+!global $EXISTING_SYSTEM_BG_COLOR = "#999999"
+!global $EXISTING_SYSTEM_BORDER_COLOR = "#8A8A8A"
+
+!unquoted procedure System_Existing($alias, $label, $descr="", $sprite="", $tags="")
+rectangle "$getSystem($label, $descr, $sprite)$getProps()" $toStereos("external system", $tags) as $alias
+!endprocedure
+
+UpdateSkinparamsAndLegendEntry("external system", $bgColor=$EXISTING_SYSTEM_BG_COLOR, $fontColor=$COLOR_NEUTRAL, $borderColor=$EXISTING_SYSTEM_BORDER_COLOR)
+
+System_Existing(exchanges, "Crypto Exchanges", "Supported exchanges: CEX.IO")
+System_Boundary(c3, "Aggregator service") {
+
+    Component(ticker, "Tickers Job", "Quartz Job", "Quartz job bean which triggers every minute for Crypto processor")
+    Component(cryptoProcessor, "Crypto Processor", "Spring Service", "Spring service which triggers all crypto processors for fetching prices from exchanges")
+    Component(cex, "CEX.IO Exchange Processor", "Spring Service", "Spring service which fetchs up-to-date crypto prices from CEX.IO exchange")
+    Component(initProcessor, "Init Processor", "Spring Service", "Spring service which triggers init services")
+    Component(coinInit, "Coin Init Service", "Spring Service", "Spring services which initialize database with all crypto currencies")
+    Component(coinPairInit, "Coin Pair Init Service", "Spring Service", "Spring services which initialize database with all crypto currency pairs")
+    Component(exchangeInit, "Exchange Init Service", "Spring Service", "Spring services which initialize database with all exchanges")
+}
+ContainerDb(db, "Database", "MySQL", "Holds information about Botocrypt crypto pairs and exchanges", $sprite="mysql_server")
+Container(arbitrage, "Arbitrage Service", "Play framework", "Receives cryptocurrency prices from Arbitrage service and finds trading opportunities")
+
+Rel_D(initProcessor, coinInit, "Trigger Coin Initialization", "Service call")
+Rel_D(initProcessor, coinPairInit, "Trigger Coin Pair Initialization", "Service call")
+Rel_D(initProcessor, exchangeInit, "Trigger Exchange Initialization", "Service call")
+Rel_D(coinInit, db, "Writes", "JDBC")
+Rel_D(coinPairInit, db, "Writes", "JDBC")
+Rel_D(exchangeInit, db, "Writes", "JDBC")
+Rel_D(ticker, cryptoProcessor, "Trigger crypto processor", "Service call")
+Rel_D(cryptoProcessor, cex, "Trigger exchange processor", "Service call")
+Rel_L(cex, exchanges, "Fetch prices", "REST")
+Rel_D(cex, arbitrage, "Send coin prices", "gRPC")
+Rel_D(cex, db, "Reads", "JDBC")
+
+
+@enduml

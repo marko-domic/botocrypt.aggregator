@@ -2,7 +2,7 @@ pluginManagement {
     plugins {
         id 'io.spring.dependency-management' version '1.0.11.RELEASE'
         id 'org.springframework.boot' version spring_boot_version
-        id 'org.openapi.generator' version '5.1.0'
+        id 'org.openapi.generator' version '5.4.0'
         id 'de.undercouch.download' version '4.1.1'
         id 'com.google.protobuf' version '0.8.16'
     }

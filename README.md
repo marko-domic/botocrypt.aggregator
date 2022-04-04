@@ -1,14 +1,34 @@
 # Data Aggregator Service
 
-A part of the botocrypt platform, the main purpose of this service is to collect all necessary data from cryptocurrency exchanges regarding specific cryptocurrencies, their prices and rest of their data. When they are collected, together they are sent to the **arbitrage service**.
+A part of the botocrypt platform, the main purpose of this service is to collect all necessary data from cryptocurrency 
+exchanges regarding specific cryptocurrencies, their prices and rest of their data. When they are collected, together 
+they are sent to the **Arbitrage service**.
 
 ## Architecture overview
 
-An overview of Botocrypt architecture looks something like this:
+An overview of Botocrypt architecture and Aggregator service looks like this (using C4 model for visualising):
 
-![Botocrypt architecture preview](resources/botocrypt_architecture.png)
+&nbsp;&nbsp;
 
-The main purpose of Aggregator service is to fetch all necessary data regarding cryptocurrencies from exchanges (their prices, matching pairs...), group and send them to the Arbitrage service. There is no advanced logic or any other calculation happening in this service.
+*Level 1 - System context*
+&nbsp;&nbsp;&nbsp;&nbsp;
+![Level 1 - System context](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/marko-domic/botocrypt.aggregator/main/doc/level-1-system-context.wsd)
+
+&nbsp;&nbsp;
+
+*Level 2 - Container diagram*
+&nbsp;&nbsp;&nbsp;&nbsp;
+![Level 2 - Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/marko-domic/botocrypt.aggregator/main/doc/level-2-container-diagram.wsd)
+
+&nbsp;&nbsp;
+
+*Level 3 - Component diagram*
+&nbsp;&nbsp;&nbsp;&nbsp;
+![Level 3 - Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/marko-domic/botocrypt.aggregator/main/doc/level-3-component-diagram.wsd)
+
+The main purpose of Aggregator service is to fetch all necessary data regarding cryptocurrencies from exchanges (their 
+prices, matching pairs...), group and send them to the Arbitrage service. There is no advanced logic or any other 
+calculation happening in this service.
 
 ## Registered exchanges
 
@@ -26,21 +46,21 @@ Currencies with which Aggregator service works are:
 
 ## Technology Stack
 
-### Data
-
-|                 Technology                                               |                              Description                        |
-|--------------------------------------------------------------------------|-----------------------------------------------------------------|
-|<a href="https://flywaydb.org/">Flyway</a>                                |Version control for database                                     |
-|<a href="https://www.mysql.com/">MySQL</a>                                |Open-Source Relational Database Management System                |
-|<a href="https://www.h2database.com/html/main.html">H2 Database Engine</a>|Java SQL database. Embedded and server modes; in-memory databases|
-
 ### Server
 
-|                                            Technology                                               |                              Description                                     |
-|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
-|<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JDK</a>|Java™ Platform, Standard Edition Development Kit                              |
-|<a href="https://spring.io/projects/spring-boot">Spring Boot</a>                                     |Framework to ease the bootstrapping and development of new Spring Applications|
-|<a href="https://gradle.org/">Gradle</a>                                                             |Build Tool                                                                    |
+| Technology                                                                                            | Description                                                                    |
+|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JDK</a> | Java™ Platform, Standard Edition Development Kit                               |
+| <a href="https://spring.io/projects/spring-boot">Spring Boot</a>                                      | Framework to ease the bootstrapping and development of new Spring Applications |
+| <a href="https://gradle.org/">Gradle</a>                                                              | Build Tool                                                                     |
+
+### Data
+
+| Technology                                                                 | Description                                                       |
+|----------------------------------------------------------------------------|-------------------------------------------------------------------|
+| <a href="https://flywaydb.org/">Flyway</a>                                 | Version control for database                                      |
+| <a href="https://www.mysql.com/">MySQL</a>                                 | Open-Source Relational Database Management System                 |
+| <a href="https://www.h2database.com/html/main.html">H2 Database Engine</a> | Java SQL database. Embedded and server modes; in-memory databases |
 
 ###  Libraries and Plugins
 
@@ -61,7 +81,7 @@ Currencies with which Aggregator service works are:
 
 ### Project download
 
-Downloading Arbitrage service Spring Boot project on local machine can be done by executing command:
+Downloading Aggregator service Spring Boot project on local machine can be done by executing command:
 
 ```shell
 git clone https://github.com/marko-domic/botocrypt.aggregator.git
