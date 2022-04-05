@@ -33,7 +33,7 @@ Rel_D(exchangeInit, db, "Writes", "JDBC")
 Rel_D(ticker, cryptoProcessor, "Trigger crypto processor", "Service call")
 Rel_D(cryptoProcessor, cex, "Trigger exchange processor", "Service call")
 Rel_L(cex, exchanges, "Fetch prices", "REST")
-Rel_D(cex, arbitrage, "Send coin prices", "gRPC")
+Rel_L(cryptoProcessor, arbitrage, "Send coin prices", "gRPC")
 Rel_D(cex, db, "Reads", "JDBC")
 
 
