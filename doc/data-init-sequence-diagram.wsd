@@ -1,0 +1,50 @@
+@startuml C4_Elements
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+participant "Init Runner" as initRunner #9EA0CA
+participant "Init Processor" as initProcessor #9EA0CA
+participant "Coin Init Service" as coinInitService #9EA0CA
+participant "Exchange Init Service" as exchangeInitService #9EA0CA
+participant "Coin Pair Init Service" as coinPairInitService #9EA0CA
+database "MySQL" as db #3768BB
+
+initRunner -> initProcessor: /init-repository-with-data
+activate initProcessor
+
+    initProcessor -> coinInitService: /initialize-trading-coins
+    activate coinInitService
+
+        loop number of coins
+            coinInitService -> db: Persist trading coin
+            db --> coinInitService: Trading coin saved
+        end
+
+        coinInitService --> initProcessor: All trading coins initialized
+    deactivate coinInitService
+
+    initProcessor -> exchangeInitService: /initialize-trading-exchanges
+    activate exchangeInitService
+
+        loop number of exchanges
+            exchangeInitService -> db: Persist trading exchange
+            db --> exchangeInitService: Trading exchange saved
+        end
+
+        exchangeInitService --> initProcessor: All trading exchanges initialized
+    deactivate exchangeInitService
+
+    initProcessor -> coinPairInitService: /initialize-trading-coin-pairs
+    activate coinPairInitService
+
+        loop number of coin pairs
+            coinPairInitService -> db: Persist trading coin pair
+            db --> coinPairInitService: Trading coin pair saved
+        end
+
+        coinPairInitService --> initProcessor: All trading coin pairs initialized
+    deactivate coinPairInitService
+
+    initProcessor --> initRunner: Necessary data initialized
+deactivate initProcessor
+
+@enduml

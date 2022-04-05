@@ -26,6 +26,20 @@ An overview of Botocrypt architecture and Aggregator service looks like this (us
 &nbsp;&nbsp;&nbsp;&nbsp;
 ![Level 3 - Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/marko-domic/botocrypt.aggregator/main/doc/level-3-component-diagram.wsd)
 
+There are 2 different role types of Arbitrage service.
+
+&nbsp;&nbsp;
+
+*Initializing database with necessary data regarding trading coins and exchanges*
+&nbsp;&nbsp;&nbsp;&nbsp;
+![Service initialization sequence diagram](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/marko-domic/botocrypt.aggregator/main/doc/data-init-sequence-diagram.wsd)
+
+&nbsp;&nbsp;
+
+*Fetch coin prices from exchanges and send them to Arbitrage service*
+&nbsp;&nbsp;&nbsp;&nbsp;
+![Main functionality sequence diagram](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/marko-domic/botocrypt.aggregator/main/doc/coin-aggregate-sequence-diagram.wsd)
+
 The main purpose of Aggregator service is to fetch all necessary data regarding cryptocurrencies from exchanges (their 
 prices, matching pairs...), group and send them to the Arbitrage service. There is no advanced logic or any other 
 calculation happening in this service.
