@@ -27,7 +27,11 @@ public class CoinPairInitService implements InitService {
   private static final String[] COINS = {
       "BTC",
       "USD",
-      "ETH"
+      "ETH",
+      "XRP",
+      "XLM",
+      "LTC",
+      "ADA"
   };
 
   private static final String[] EXCHANGES = {
@@ -37,7 +41,14 @@ public class CoinPairInitService implements InitService {
   private static final CoinPairInfo[] COIN_PAIR_INFOS = {
       new CoinPairInfo("BTC", "USD", "CEX.IO", "BTC:USD"),
       new CoinPairInfo("ETH", "USD", "CEX.IO", "ETH:USD"),
-      new CoinPairInfo("ETH", "BTC", "CEX.IO", "ETH:BTC")
+      new CoinPairInfo("ETH", "BTC", "CEX.IO", "ETH:BTC"),
+      new CoinPairInfo("XRP", "USD", "CEX.IO", "XRP:USD"),
+      new CoinPairInfo("XRP", "BTC", "CEX.IO", "XRP:BTC"),
+      new CoinPairInfo("XLM", "USD", "CEX.IO", "XLM:USD"),
+      new CoinPairInfo("XLM", "BTC", "CEX.IO", "XLM:BTC"),
+      new CoinPairInfo("LTC", "USD", "CEX.IO", "LTC:USD"),
+      new CoinPairInfo("LTC", "BTC", "CEX.IO", "LTC:BTC"),
+      new CoinPairInfo("ADA", "USD", "CEX.IO", "ADA:USD")
   };
 
   private final CoinRepository coinRepository;

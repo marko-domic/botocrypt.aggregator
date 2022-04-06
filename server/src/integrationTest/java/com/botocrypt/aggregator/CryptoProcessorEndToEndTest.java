@@ -107,6 +107,41 @@ public class CryptoProcessorEndToEndTest {
         get(urlPathMatching("/api/order_book/ETH/BTC")).atPriority(1).willReturn(
             aResponse().withStatus(200).withHeader("Content-Type", "text/json")
                 .withBodyFile("orders/cex/order_3.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/XRP/USD")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_4.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/XRP/BTC")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_5.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/XLM/USD")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_6.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/XLM/BTC")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_7.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/LTC/USD")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_8.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/LTC/BTC")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_9.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/ADA/USD")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_10.json"))));
   }
 
   @AfterAll
@@ -122,14 +157,14 @@ public class CryptoProcessorEndToEndTest {
 
     // Check if repository is initialized with necessary data
     initProcessor.initRepositoryWithNecessaryData();
-    assertEquals(3, coinRepository.count());
+    assertEquals(7, coinRepository.count());
     assertEquals(1, exchangeRepository.count());
-    assertEquals(3, coinPairRepository.count());
+    assertEquals(10, coinPairRepository.count());
 
     await().atMost(6, TimeUnit.SECONDS).until(CoinPairDtoHandler::grpcServerResponded);
 
     final List<CoinPairDto> coinPairs = CoinPairDtoHandler.getCoinPairs();
-    assertEquals(3, coinPairs.size());
+    assertEquals(10, coinPairs.size());
 
     final CoinPairDto firstCoinPairDto = coinPairs.get(0);
     assertEquals("CEX.IO", firstCoinPairDto.getExchange());
@@ -169,6 +204,97 @@ public class CryptoProcessorEndToEndTest {
     assertEquals(0.07806816867106742, thirdCoinPairOrder.getAskAveragePrice());
     assertEquals(6.383454, thirdCoinPairOrder.getAskQuantity());
     assertEquals("CEX.IO", thirdCoinPairOrder.getExchange());
+
+    final CoinPairDto fourthCoinPairDto = coinPairs.get(3);
+    assertEquals("CEX.IO", fourthCoinPairDto.getExchange());
+
+    final CoinPairOrderDto fourthCoinPairOrder = fourthCoinPairDto.getCoinPairOrder();
+    assertNotNull(fourthCoinPairOrder);
+    assertEquals("XRP", fourthCoinPairOrder.getFirstCoin());
+    assertEquals("USD", fourthCoinPairOrder.getSecondCoin());
+    assertEquals(0.8165450184387861, fourthCoinPairOrder.getBidAveragePrice());
+    assertEquals(27249.364902, fourthCoinPairOrder.getBidQuantity());
+    assertEquals(0.8178960420490105, fourthCoinPairOrder.getAskAveragePrice());
+    assertEquals(12995.2309, fourthCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", fourthCoinPairOrder.getExchange());
+
+    final CoinPairDto fifthCoinPairDto = coinPairs.get(4);
+    assertEquals("CEX.IO", fifthCoinPairDto.getExchange());
+
+    final CoinPairOrderDto fifthCoinPairOrder = fifthCoinPairDto.getCoinPairOrder();
+    assertNotNull(fifthCoinPairOrder);
+    assertEquals("XRP", fifthCoinPairOrder.getFirstCoin());
+    assertEquals("BTC", fifthCoinPairOrder.getSecondCoin());
+    assertEquals(0.00001790548703485728, fifthCoinPairOrder.getBidAveragePrice());
+    assertEquals(6170.875072, fifthCoinPairOrder.getBidQuantity());
+    assertEquals(0.00001802122143318497, fifthCoinPairOrder.getAskAveragePrice());
+    assertEquals(12546.215543, fifthCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", fifthCoinPairOrder.getExchange());
+
+    final CoinPairDto sixthCoinPairDto = coinPairs.get(5);
+    assertEquals("CEX.IO", sixthCoinPairDto.getExchange());
+
+    final CoinPairOrderDto sixthCoinPairOrder = sixthCoinPairDto.getCoinPairOrder();
+    assertNotNull(sixthCoinPairOrder);
+    assertEquals("XLM", sixthCoinPairOrder.getFirstCoin());
+    assertEquals("USD", sixthCoinPairOrder.getSecondCoin());
+    assertEquals(0.2223011125679784, sixthCoinPairOrder.getBidAveragePrice());
+    assertEquals(19188.9498693, sixthCoinPairOrder.getBidQuantity());
+    assertEquals(0.2226642421292595, sixthCoinPairOrder.getAskAveragePrice());
+    assertEquals(14416.0135872, sixthCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", sixthCoinPairOrder.getExchange());
+
+    final CoinPairDto seventhCoinPairDto = coinPairs.get(6);
+    assertEquals("CEX.IO", seventhCoinPairDto.getExchange());
+
+    final CoinPairOrderDto seventhCoinPairOrder = seventhCoinPairDto.getCoinPairOrder();
+    assertNotNull(seventhCoinPairOrder);
+    assertEquals("XLM", seventhCoinPairOrder.getFirstCoin());
+    assertEquals("BTC", seventhCoinPairOrder.getSecondCoin());
+    assertEquals(0.000004788942618267644, seventhCoinPairOrder.getBidAveragePrice());
+    assertEquals(8710.8266808, seventhCoinPairOrder.getBidQuantity());
+    assertEquals(0.000004917748285017264, seventhCoinPairOrder.getAskAveragePrice());
+    assertEquals(7610.3816244, seventhCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", seventhCoinPairOrder.getExchange());
+
+    final CoinPairDto eighthCoinPairDto = coinPairs.get(7);
+    assertEquals("CEX.IO", eighthCoinPairDto.getExchange());
+
+    final CoinPairOrderDto eighthCoinPairOrder = eighthCoinPairDto.getCoinPairOrder();
+    assertNotNull(eighthCoinPairOrder);
+    assertEquals("LTC", eighthCoinPairOrder.getFirstCoin());
+    assertEquals("USD", eighthCoinPairOrder.getSecondCoin());
+    assertEquals(120.9233583974112, eighthCoinPairOrder.getBidAveragePrice());
+    assertEquals(38.43538842, eighthCoinPairOrder.getBidQuantity());
+    assertEquals(121.1021115883859, eighthCoinPairOrder.getAskAveragePrice());
+    assertEquals(22.37896561, eighthCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", eighthCoinPairOrder.getExchange());
+
+    final CoinPairDto ninthCoinPairDto = coinPairs.get(8);
+    assertEquals("CEX.IO", ninthCoinPairDto.getExchange());
+
+    final CoinPairOrderDto ninthCoinPairOrder = ninthCoinPairDto.getCoinPairOrder();
+    assertNotNull(ninthCoinPairOrder);
+    assertEquals("LTC", ninthCoinPairOrder.getFirstCoin());
+    assertEquals("BTC", ninthCoinPairOrder.getSecondCoin());
+    assertEquals(0.002652206043218867, ninthCoinPairOrder.getBidAveragePrice());
+    assertEquals(213.39690379, ninthCoinPairOrder.getBidQuantity());
+    assertEquals(0.002660395975875171, ninthCoinPairOrder.getAskAveragePrice());
+    assertEquals(133.62031036, ninthCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", ninthCoinPairOrder.getExchange());
+
+    final CoinPairDto tenthCoinPairDto = coinPairs.get(9);
+    assertEquals("CEX.IO", tenthCoinPairDto.getExchange());
+
+    final CoinPairOrderDto tenthCoinPairOrder = tenthCoinPairDto.getCoinPairOrder();
+    assertNotNull(tenthCoinPairOrder);
+    assertEquals("ADA", tenthCoinPairOrder.getFirstCoin());
+    assertEquals("USD", tenthCoinPairOrder.getSecondCoin());
+    assertEquals(1.15617978015954, tenthCoinPairOrder.getBidAveragePrice());
+    assertEquals(11831.964069, tenthCoinPairOrder.getBidQuantity());
+    assertEquals(1.157906028368539, tenthCoinPairOrder.getAskAveragePrice());
+    assertEquals(12886.129137, tenthCoinPairOrder.getAskQuantity());
+    assertEquals("CEX.IO", tenthCoinPairOrder.getExchange());
   }
 
   private static class CoinPairDtoHandler implements StreamObserver<CoinPairDto> {

@@ -29,7 +29,11 @@ public class CoinPairInitServiceTest {
   private static final Coin[] COINS = {
       Coin.builder().id(1).symbol("BTC").minAmount(0.15944).build(),
       Coin.builder().id(2).symbol("USD").minAmount(10000).build(),
-      Coin.builder().id(3).symbol("ETH").minAmount(3).build()
+      Coin.builder().id(3).symbol("ETH").minAmount(3).build(),
+      Coin.builder().id(4).symbol("XRP").minAmount(12286).build(),
+      Coin.builder().id(5).symbol("XLM").minAmount(45165).build(),
+      Coin.builder().id(6).symbol("LTC").minAmount(83).build(),
+      Coin.builder().id(7).symbol("ADA").minAmount(8672).build()
   };
 
   private static final Exchange[] EXCHANGES = {
@@ -39,7 +43,14 @@ public class CoinPairInitServiceTest {
   private static final CoinPairIdentity[] COIN_PAIR_IDENTITIES = {
       CoinPairIdentity.builder().firstCoinId(1).secondCoinId(2).exchangeId(1).build(),
       CoinPairIdentity.builder().firstCoinId(3).secondCoinId(2).exchangeId(1).build(),
-      CoinPairIdentity.builder().firstCoinId(3).secondCoinId(1).exchangeId(1).build()
+      CoinPairIdentity.builder().firstCoinId(3).secondCoinId(1).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(4).secondCoinId(2).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(4).secondCoinId(1).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(5).secondCoinId(2).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(5).secondCoinId(1).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(6).secondCoinId(2).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(6).secondCoinId(1).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(7).secondCoinId(2).exchangeId(1).build()
   };
 
   private static final CoinPair[] COIN_PAIRS = {
@@ -63,6 +74,55 @@ public class CoinPairInitServiceTest {
           .secondCoin(COINS[0])
           .exchange(EXCHANGES[0])
           .marketSymbol("ETH:BTC")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[3])
+          .firstCoin(COINS[3])
+          .secondCoin(COINS[1])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ETH:BTC")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[4])
+          .firstCoin(COINS[3])
+          .secondCoin(COINS[0])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ETH:BTC")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[5])
+          .firstCoin(COINS[4])
+          .secondCoin(COINS[1])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ETH:BTC")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[6])
+          .firstCoin(COINS[4])
+          .secondCoin(COINS[0])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ETH:BTC")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[7])
+          .firstCoin(COINS[5])
+          .secondCoin(COINS[1])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ETH:BTC")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[8])
+          .firstCoin(COINS[5])
+          .secondCoin(COINS[0])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ETH:BTC")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[9])
+          .firstCoin(COINS[6])
+          .secondCoin(COINS[1])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ETH:BTC")
           .build()
   };
 
@@ -82,7 +142,7 @@ public class CoinPairInitServiceTest {
   void testInit() {
 
     doReturn(Arrays.asList(COINS)).when(coinRepository)
-        .findBySymbolIn(eq(Arrays.asList("BTC", "USD", "ETH")));
+        .findBySymbolIn(eq(Arrays.asList("BTC", "USD", "ETH", "XRP", "XLM", "LTC", "ADA")));
     doReturn(Arrays.asList(EXCHANGES)).when(exchangeRepository)
         .findByNameIn(eq(Collections.singletonList("CEX.IO")));
     Arrays.stream(COIN_PAIR_IDENTITIES).forEach(
@@ -91,7 +151,7 @@ public class CoinPairInitServiceTest {
 
     coinPairInitService.init();
 
-    verify(coinRepository).findBySymbolIn(eq(Arrays.asList("BTC", "USD", "ETH")));
+    verify(coinRepository).findBySymbolIn(eq(Arrays.asList("BTC", "USD", "ETH", "XRP", "XLM", "LTC", "ADA")));
     verify(exchangeRepository).findByNameIn(eq(Collections.singletonList("CEX.IO")));
     Arrays.stream(COIN_PAIR_IDENTITIES)
         .forEach(pair_id -> verify(coinPairRepository).findById(eq(pair_id)));
@@ -102,7 +162,7 @@ public class CoinPairInitServiceTest {
   void testInitIfCoinPairsAreAlreadyInRepository() {
 
     doReturn(Arrays.asList(COINS)).when(coinRepository)
-        .findBySymbolIn(eq(Arrays.asList("BTC", "USD", "ETH")));
+        .findBySymbolIn(eq(Arrays.asList("BTC", "USD", "ETH", "XRP", "XLM", "LTC", "ADA")));
     doReturn(Arrays.asList(EXCHANGES)).when(exchangeRepository)
         .findByNameIn(eq(Collections.singletonList("CEX.IO")));
     for (int i = 0; i < COIN_PAIRS.length; i++) {
@@ -112,7 +172,7 @@ public class CoinPairInitServiceTest {
 
     coinPairInitService.init();
 
-    verify(coinRepository).findBySymbolIn(eq(Arrays.asList("BTC", "USD", "ETH")));
+    verify(coinRepository).findBySymbolIn(eq(Arrays.asList("BTC", "USD", "ETH", "XRP", "XLM", "LTC", "ADA")));
     verify(exchangeRepository).findByNameIn(eq(Collections.singletonList("CEX.IO")));
     Arrays.stream(COIN_PAIR_IDENTITIES)
         .forEach(pair_id -> verify(coinPairRepository).findById(eq(pair_id)));
