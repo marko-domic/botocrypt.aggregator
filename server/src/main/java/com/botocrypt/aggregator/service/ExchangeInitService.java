@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ExchangeInitService implements InitService {
 
   private static final String[] EXCHANGES = {
-      "CEX.IO"
+      "CEX.IO", "Binance"
   };
 
   private final ExchangeRepository exchangeRepository;

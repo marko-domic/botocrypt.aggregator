@@ -31,14 +31,17 @@ public class CoinPairInitService implements InitService {
       "XRP",
       "XLM",
       "LTC",
-      "ADA"
+      "ADA",
+      "USDT"
   };
 
   private static final String[] EXCHANGES = {
-      "CEX.IO"
+      "CEX.IO", "Binance"
   };
 
   private static final CoinPairInfo[] COIN_PAIR_INFOS = {
+
+      // CEX.IO coin pairs
       new CoinPairInfo("BTC", "USD", "CEX.IO", "BTC:USD"),
       new CoinPairInfo("ETH", "USD", "CEX.IO", "ETH:USD"),
       new CoinPairInfo("ETH", "BTC", "CEX.IO", "ETH:BTC"),
@@ -48,7 +51,24 @@ public class CoinPairInitService implements InitService {
       new CoinPairInfo("XLM", "BTC", "CEX.IO", "XLM:BTC"),
       new CoinPairInfo("LTC", "USD", "CEX.IO", "LTC:USD"),
       new CoinPairInfo("LTC", "BTC", "CEX.IO", "LTC:BTC"),
-      new CoinPairInfo("ADA", "USD", "CEX.IO", "ADA:USD")
+      new CoinPairInfo("ADA", "USD", "CEX.IO", "ADA:USD"),
+
+      // Binance coin pairs
+      new CoinPairInfo("BTC", "USDT", "Binance", "BTCUSDT"),
+      new CoinPairInfo("ETH", "USDT", "Binance", "ETHUSDT"),
+      new CoinPairInfo("ETH", "BTC", "Binance", "ETHBTC"),
+      new CoinPairInfo("XRP", "USDT", "Binance", "XRPUSDT"),
+      new CoinPairInfo("XRP", "BTC", "Binance", "XRPBTC"),
+      new CoinPairInfo("XRP", "ETH", "Binance", "XRPETH"),
+      new CoinPairInfo("XLM", "BTC", "Binance", "XLMBTC"),
+      new CoinPairInfo("XLM", "ETH", "Binance", "XLMETH"),
+      new CoinPairInfo("XLM", "USDT", "Binance", "XLMUSDT"),
+      new CoinPairInfo("LTC", "BTC", "Binance", "LTCBTC"),
+      new CoinPairInfo("LTC", "ETH", "Binance", "LTCETH"),
+      new CoinPairInfo("LTC", "USDT", "Binance", "LTCUSDT"),
+      new CoinPairInfo("ADA", "BTC", "Binance", "ADABTC"),
+      new CoinPairInfo("ADA", "ETH", "Binance", "ADAETH"),
+      new CoinPairInfo("ADA", "USDT", "Binance", "ADAUSDT")
   };
 
   private final CoinRepository coinRepository;

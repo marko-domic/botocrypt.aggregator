@@ -1,11 +1,11 @@
-package com.botocrypt.aggregator.processor.cex;
+package com.botocrypt.aggregator.processor.binance;
 
 import com.botocrypt.aggregator.model.CoinPair;
 import com.botocrypt.aggregator.model.CryptoPairOrder;
 import com.botocrypt.aggregator.processor.ExchangeProcessor;
 import com.botocrypt.aggregator.service.CoinPairService;
-import com.botocrypt.exchange.cex.io.api.OrderBookApi;
-import com.botocrypt.exchange.cex.io.dto.OrderBookDto;
+import com.botocrypt.exchange.binance.api.OrderBookApi;
+import com.botocrypt.exchange.binance.dto.OrderBookDto;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -21,27 +21,26 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @Profile("service")
-public class CexExchangeProcessor implements ExchangeProcessor {
-
-  private static final String COIN_PAIR_SEPARATOR = ":";
+public class BinanceExchangeProcessor implements ExchangeProcessor {
 
   private final OrderBookApi orderBookApi;
   private final CoinPairService coinPairService;
 
-  private final String CEX_EXCHANGE_NAME;
+  private final String BINANCE_EXCHANGE_NAME;
 
   @Autowired
-  public CexExchangeProcessor(OrderBookApi orderBookApi, CoinPairService coinPairService,
-      @Value("${aggregator.exchange.cex.name}") String cexExchangeName) {
+  public BinanceExchangeProcessor(OrderBookApi orderBookApi, CoinPairService coinPairService,
+      @Value("${aggregator.exchange.binance.name}") String binanceExchangeName) {
     this.orderBookApi = orderBookApi;
     this.coinPairService = coinPairService;
-    this.CEX_EXCHANGE_NAME = cexExchangeName;
+    BINANCE_EXCHANGE_NAME = binanceExchangeName;
   }
 
   @Override
   public List<CryptoPairOrder> getCoinPrices() {
 
-    final List<CoinPair> coinPairs = coinPairService.getCoinPairsFromRepository(CEX_EXCHANGE_NAME);
+    final List<CoinPair> coinPairs = coinPairService.getCoinPairsFromRepository(
+        BINANCE_EXCHANGE_NAME);
     return coinPairs
         .stream()
         .map(this::generateCryptoPairOrderFromExchange)
@@ -51,7 +50,7 @@ public class CexExchangeProcessor implements ExchangeProcessor {
 
   @Override
   public String exchangeName() {
-    return CEX_EXCHANGE_NAME;
+    return BINANCE_EXCHANGE_NAME;
   }
 
   private CryptoPairOrder generateCryptoPairOrderFromExchange(CoinPair coinPair) {
@@ -63,18 +62,17 @@ public class CexExchangeProcessor implements ExchangeProcessor {
       return null;
     }
 
-    final String[] coinSymbols = coinPair.getMarketSymbol().split(COIN_PAIR_SEPARATOR);
-    final Mono<OrderBookDto> monoResponse = orderBookApi
-        .getOrderBookForCryptoPair(coinSymbols[0], coinSymbols[1]);
+    final String coinPairSymbol = coinPair.getMarketSymbol();
+    final Mono<OrderBookDto> monoResponse = orderBookApi.getOrderBookForCryptoPair(coinPairSymbol);
 
     if (monoResponse == null) {
-      log.warn("No data fetched from CEX.IO (monoResponse is null)");
+      log.warn("No data fetched from Binance (monoResponse is null)");
       return null;
     }
 
     final OrderBookDto orderBookDto = monoResponse.block();
     if (orderBookDto == null) {
-      log.warn("No data fetched from CEX.IO (orderBookDto is null)");
+      log.warn("No data fetched from Binance (orderBookDto is null)");
       return null;
     }
 
@@ -96,7 +94,7 @@ public class CexExchangeProcessor implements ExchangeProcessor {
         bidPriceQuantity.getQuantity(),
         calculateAveragePrice(askPriceQuantity.getPrice(), askPriceQuantity.getQuantity()),
         askPriceQuantity.getQuantity(),
-        CEX_EXCHANGE_NAME);
+        BINANCE_EXCHANGE_NAME);
   }
 
   private CoinPriceQuantity generateCoinPriceQuantity(List<List<BigDecimal>> orders,

@@ -22,7 +22,8 @@ public class CoinInitService implements InitService {
       new CoinInfo("XRP", 12286),
       new CoinInfo("XLM", 45165),
       new CoinInfo("LTC", 83),
-      new CoinInfo("ADA", 8672)
+      new CoinInfo("ADA", 8672),
+      new CoinInfo("USDT", 10000),
   };
 
   private final CoinRepository coinRepository;

@@ -4,8 +4,10 @@
 participant "Tickers Job" as ticker #9EA0CA
 participant "Crypto Processor" as cryptoProcessor #9EA0CA
 participant "CEX.IO Exchange Processor" as cexProcessor #9EA0CA
+participant "Binance Exchange Processor" as binanceProcessor #9EA0CA
 database "MySQL" as db #3768BB
 participant "CEX.IO Exchange" as cexExchange #999999
+participant "Binance Exchange" as binanceExchange #999999
 participant "Arbitrage Service" as arbitrage #8A8A8A
 
 loop Every minute
@@ -27,6 +29,22 @@ loop Every minute
             
             cexProcessor --> cryptoProcessor: Coin prices fetched from CEX.IO sent
         deactivate cexProcessor
+
+        cryptoProcessor -> binanceProcessor: /aggregate-coin-prices-from-binance
+        activate binanceProcessor
+
+            binanceProcessor -> db: Reads coins data
+            activate db
+                db --> binanceProcessor
+            deactivate db
+
+            binanceProcessor -> binanceExchange: [REST] /fetch-coin-prices
+            activate binanceExchange
+                binanceExchange --> binanceProcessor: Coin prices fetched
+            deactivate binanceExchange
+            
+            binanceProcessor --> cryptoProcessor: Coin prices fetched from Binance sent
+        deactivate binanceProcessor
 
         cryptoProcessor -> arbitrage: [gRPC] /send-coin-prices
         activate arbitrage

@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ExchangeInitServiceTest {
 
   private static final String[] EXCHANGES = {
-      "CEX.IO"
+      "CEX.IO", "Binance"
   };
 
   @Mock

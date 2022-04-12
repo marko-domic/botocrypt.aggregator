@@ -9,4 +9,4 @@ pluginManagement {
 }
 
 rootProject.name = 'aggregator'
-include 'server', 'cex_api', 'arbitrage_api'
+include 'server', 'cex_api', 'binance_api', 'arbitrage_api'

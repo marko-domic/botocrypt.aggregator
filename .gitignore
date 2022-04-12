@@ -46,5 +46,9 @@ cex_api/*
 !cex_api/build.gradle
 !cex_api/.openapi-generator-ignore
 
+binance_api/*
+!binance_api/build.gradle
+!binance_api/.openapi-generator-ignore
+
 arbitrage_api/*
 !arbitrage_api/build.gradle

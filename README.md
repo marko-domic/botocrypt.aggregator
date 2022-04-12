@@ -49,6 +49,7 @@ calculation happening in this service.
 Exchanges from where Aggregator service receives cryptocurrency orders are:
 
 * [CEX.IO](https://cex.io/)
+* [Binance](https://www.binance.com/en)
 
 ## Registered currencies
 
@@ -61,6 +62,7 @@ Currencies with which Aggregator service works are:
 * XLM
 * LTC
 * ADA
+* USDT
 
 ## Technology Stack
 
