@@ -163,6 +163,36 @@ public class CryptoProcessorEndToEndTest {
         get(urlPathMatching("/api/order_book/ADA/USD")).atPriority(1).willReturn(
             aResponse().withStatus(200).withHeader("Content-Type", "text/json")
                 .withBodyFile("orders/cex/order_10.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/BTC/USDT")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_11.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/ETH/USDT")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_12.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/XRP/USDT")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_13.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/XLM/USDT")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_14.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/LTC/USDT")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_15.json"))));
+
+    cexMockServer.addStubMapping(cexMockServer.stubFor(
+        get(urlPathMatching("/api/order_book/ADA/USDT")).atPriority(1).willReturn(
+            aResponse().withStatus(200).withHeader("Content-Type", "text/json")
+                .withBodyFile("orders/cex/order_16.json"))));
   }
 
   private static void initBinanceMockServer() {
@@ -315,18 +345,18 @@ public class CryptoProcessorEndToEndTest {
     initProcessor.initRepositoryWithNecessaryData();
     assertEquals(8, coinRepository.count());
     assertEquals(2, exchangeRepository.count());
-    assertEquals(25, coinPairRepository.count());
+    assertEquals(31, coinPairRepository.count());
 
     await().atMost(6, TimeUnit.SECONDS).until(CoinPairDtoHandler::grpcServerResponded);
 
     final List<CoinPairDto> coinPairs = CoinPairDtoHandler.getCoinPairs();
-    assertEquals(25, coinPairs.size());
+    assertEquals(31, coinPairs.size());
 
     // Validate number of coin pairs from CEX.IO exchange
     final long numOfCoinsOnCex = coinPairs.stream()
         .filter(coinPairDto -> coinPairDto.getExchange().equals("CEX.IO"))
         .count();
-    assertEquals(10L, numOfCoinsOnCex);
+    assertEquals(16L, numOfCoinsOnCex);
 
     // Validate number of coin pairs from Binance exchange
     final long numOfCoinsOnBinance = coinPairs.stream()

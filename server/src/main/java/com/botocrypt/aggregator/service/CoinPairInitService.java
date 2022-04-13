@@ -52,6 +52,12 @@ public class CoinPairInitService implements InitService {
       new CoinPairInfo("LTC", "USD", "CEX.IO", "LTC:USD"),
       new CoinPairInfo("LTC", "BTC", "CEX.IO", "LTC:BTC"),
       new CoinPairInfo("ADA", "USD", "CEX.IO", "ADA:USD"),
+      new CoinPairInfo("BTC", "USDT", "CEX.IO", "BTC:USDT"),
+      new CoinPairInfo("ETH", "USDT", "CEX.IO", "ETH:USDT"),
+      new CoinPairInfo("XRP", "USDT", "CEX.IO", "XRP:USDT"),
+      new CoinPairInfo("XLM", "USDT", "CEX.IO", "XLM:USDT"),
+      new CoinPairInfo("LTC", "USDT", "CEX.IO", "LTC:USDT"),
+      new CoinPairInfo("ADA", "USDT", "CEX.IO", "ADA:USDT"),
 
       // Binance coin pairs
       new CoinPairInfo("BTC", "USDT", "Binance", "BTCUSDT"),

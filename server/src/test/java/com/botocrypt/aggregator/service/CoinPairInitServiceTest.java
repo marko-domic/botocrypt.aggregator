@@ -54,6 +54,12 @@ public class CoinPairInitServiceTest {
       CoinPairIdentity.builder().firstCoinId(6).secondCoinId(2).exchangeId(1).build(),
       CoinPairIdentity.builder().firstCoinId(6).secondCoinId(1).exchangeId(1).build(),
       CoinPairIdentity.builder().firstCoinId(7).secondCoinId(2).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(1).secondCoinId(8).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(3).secondCoinId(8).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(4).secondCoinId(8).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(5).secondCoinId(8).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(6).secondCoinId(8).exchangeId(1).build(),
+      CoinPairIdentity.builder().firstCoinId(7).secondCoinId(8).exchangeId(1).build(),
 
       // Binance coin pairs
       CoinPairIdentity.builder().firstCoinId(1).secondCoinId(8).exchangeId(2).build(),
@@ -100,49 +106,91 @@ public class CoinPairInitServiceTest {
           .firstCoin(COINS[3])
           .secondCoin(COINS[1])
           .exchange(EXCHANGES[0])
-          .marketSymbol("ETH:BTC")
+          .marketSymbol("XRP:USD")
           .build(),
       CoinPair.builder()
           .id(COIN_PAIR_IDENTITIES[4])
           .firstCoin(COINS[3])
           .secondCoin(COINS[0])
           .exchange(EXCHANGES[0])
-          .marketSymbol("ETH:BTC")
+          .marketSymbol("XRP:BTC")
           .build(),
       CoinPair.builder()
           .id(COIN_PAIR_IDENTITIES[5])
           .firstCoin(COINS[4])
           .secondCoin(COINS[1])
           .exchange(EXCHANGES[0])
-          .marketSymbol("ETH:BTC")
+          .marketSymbol("XLM:USD")
           .build(),
       CoinPair.builder()
           .id(COIN_PAIR_IDENTITIES[6])
           .firstCoin(COINS[4])
           .secondCoin(COINS[0])
           .exchange(EXCHANGES[0])
-          .marketSymbol("ETH:BTC")
+          .marketSymbol("XLM:BTC")
           .build(),
       CoinPair.builder()
           .id(COIN_PAIR_IDENTITIES[7])
           .firstCoin(COINS[5])
           .secondCoin(COINS[1])
           .exchange(EXCHANGES[0])
-          .marketSymbol("ETH:BTC")
+          .marketSymbol("LTC:USD")
           .build(),
       CoinPair.builder()
           .id(COIN_PAIR_IDENTITIES[8])
           .firstCoin(COINS[5])
           .secondCoin(COINS[0])
           .exchange(EXCHANGES[0])
-          .marketSymbol("ETH:BTC")
+          .marketSymbol("LTC:BTC")
           .build(),
       CoinPair.builder()
           .id(COIN_PAIR_IDENTITIES[9])
           .firstCoin(COINS[6])
           .secondCoin(COINS[1])
           .exchange(EXCHANGES[0])
-          .marketSymbol("ETH:BTC")
+          .marketSymbol("ADA:USD")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[0])
+          .firstCoin(COINS[0])
+          .secondCoin(COINS[7])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("BTC:USDT")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[1])
+          .firstCoin(COINS[2])
+          .secondCoin(COINS[7])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ETH:USDT")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[3])
+          .firstCoin(COINS[3])
+          .secondCoin(COINS[7])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("XRP:USDT")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[5])
+          .firstCoin(COINS[4])
+          .secondCoin(COINS[7])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("XLM:USDT")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[7])
+          .firstCoin(COINS[5])
+          .secondCoin(COINS[7])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("LTC:USDT")
+          .build(),
+      CoinPair.builder()
+          .id(COIN_PAIR_IDENTITIES[9])
+          .firstCoin(COINS[6])
+          .secondCoin(COINS[7])
+          .exchange(EXCHANGES[0])
+          .marketSymbol("ADA:USDT")
           .build(),
 
       CoinPair.builder()
